@@ -22,8 +22,8 @@ def plotb(): #Построить
 
     """Вставка функции для реализации пачки радиоимпульсов"""
     if ui.radioButton_3.isChecked() == True:
-        radio = Radiopulse()
-        m.plot(radio.xpoints_sec, radio.Zpoints)
+        radio = Radiopulse(amplify = ui.doubleSpinBox.value())
+        m.plot(radio.xpoints_sec, radio.Ipoints)
         return
     """Конец вставки"""
 
@@ -52,9 +52,9 @@ ui.radioButton.toggled.connect(LNF)
 ui.radioButton_2.toggled.connect(NLNF)
 
 #Создание виджета графика
-m = PlotCanvas(ui,4,3,100)
+m = PlotCanvas(ui.widget,4,3,100)
 a = ui.width()
-m.move(0.5*a,0)
+#m.move(0.5*a,0)
 
 ui.show()
 exit(app.exec_())

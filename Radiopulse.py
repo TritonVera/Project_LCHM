@@ -4,18 +4,19 @@ class Radiopulse():
 	#Конструктор объекта
 	def __init__(self, length = 2.0, period_pulse = 4.0, number = 10,\
 				 period_packet = 100, frequency = 2, st = 0.0,\
-				 stp = 0.001, nd = 100.0):
+				 stp = 0.001, nd = 99.0, amplify = 1):
 		self.__length = length
 		self.__period_pulse = period_pulse
 		self.__number = number
 		self.__period_packet = period_packet
 		self.__frequency = frequency
+		self.__amplify = amplify
 		self.gen_signal(st, stp, nd)
 
 	#Конфигуратор объекта
 	def configure(self, length = None, period_pulse = None,
 				  number = None, period_packet = None,
-				  frequency = None):
+				  frequency = None, amplify = None):
 		if (length != None):
 			self.__length = length
 		if (period_pulse != None):
@@ -26,6 +27,8 @@ class Radiopulse():
 			self.__period_packet = period_packet
 		if (frequency != None):
 			self.__frequency = frequency
+		if (amplify != None):
+			self.__amplify = amplify
 
 	#Функция генерирования массивов точек радиосигнала
 	def gen_signal(self,start_time, step, end_time):
@@ -60,9 +63,10 @@ class Radiopulse():
 					self.Qpoints.append(0)
 					self.Zpoints.append(0)
 				else:
-					self.Ipoints.append(self.garmonic(in_time_c, self.__frequency))
+					self.Ipoints.append(self.garmonic(in_time_c, self.__frequency,
+													  self.__amplify))
 					self.Qpoints.append(self.garmonic(in_time_c, self.__frequency, 
-													  phs = math.pi/2))
+													  self.__amplify, phs = math.pi/2))
 					self.Zpoints.append(self.Ipoints[-1] - self.Qpoints[-1])
 	
 	#Функция гармонического сигнала

@@ -22,8 +22,8 @@ def plotb(): #Построить
 
     """Вставка функции для реализации пачки радиоимпульсов"""
     if ui.radioButton_3.isChecked() == True:
-        radio = Radiopulse()
-        m.plot(radio.xpoints_sec, radio.Zpoints)
+        radio = Radiopulse(amplify = ui.doubleSpinBox.value())
+        m.plot(radio.xpoints_sec, radio.Ipoints)
         return
     """Конец вставки"""
 

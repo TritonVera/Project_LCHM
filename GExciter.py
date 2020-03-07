@@ -9,7 +9,6 @@ Created on Fri Feb 14 21:21:17 2020
 
 from Mimp import *
 
-
 app = QApplication([])
 ui = uic.loadUi("Exciter.ui")
 type_of_signal = "test"
@@ -22,8 +21,12 @@ def plotb(): #Построить
 
     """Вставка функции для реализации пачки радиоимпульсов"""
     if ui.radioButton_3.isChecked() == True:
+        global m
         radio = Radiopulse(amplify = ui.doubleSpinBox.value())
-        m.plot(radio.xpoints_sec, radio.Ipoints)
+        radio.send_test()
+        del m
+        m = MakePlot(ui.PlotWidget, 3, 3, 100, radio.xpoints, radio.Ipoints)
+        m.move(0, 0)
         return
     """Конец вставки"""
 
@@ -52,9 +55,8 @@ ui.radioButton.toggled.connect(LNF)
 ui.radioButton_2.toggled.connect(NLNF)
 
 #Создание виджета графика
-m = PlotCanvas(ui.widget,4,3,100)
-a = ui.width()
-#m.move(0.5*a,0)
+m = PlotCanvas(ui.PlotWidget, 3, 3, 100)
+m.move(0, 0)
 
 ui.show()
 exit(app.exec_())

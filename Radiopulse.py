@@ -1,19 +1,23 @@
 import math
+from numpy import arange
 
 class Radiopulse():
 	#Конструктор объекта
 	def __init__(self, length = 2.0, period_pulse = 4.0, number = 10,\
-				 period_packet = 100, frequency = 2, st = 0.0,\
-				 stp = 0.001, nd = 99.0, amplify = 1):
+				 period_packet = 100, frequency = 2, start_time = 0.1,\
+				 step_time = 0.01, end_time = 99.0, amplify = 1):
             self.__length = length
             self.__period_pulse = period_pulse
             self.__number = number
             self.__period_packet = period_packet
             self.__frequency = frequency
             self.__amplify = amplify
-            self.gen_signal(st, stp, nd)
+            self.__start_time  = start_time
+            self.__step_time = start_time
+            self.__end_time  = end_time
+            self.gen_signal()
 
-	#Конфигуратор объекта
+	#Конфигуратор сигнала
 	def configure(self, length = None, period_pulse = None,
 				  number = None, period_packet = None,
 				  frequency = None, amplify = None):
@@ -30,15 +34,21 @@ class Radiopulse():
 		if (amplify != None):
 			self.__amplify = amplify
 
+	#Конфигуратор времени
+	def time_configure(self, start_time = None, step_time = None, end_time = None):
+		if (start_time != None):
+			self.__start_time = start_time
+		if (step_time != None):
+			self.__step_time = step_time
+		if (end_time != None):
+			self.__end_time = end_time
+		
 	#Функция генерирования массивов точек радиосигнала
-	def gen_signal(self,start_time, step, end_time):
-		#Инициализация внутренних переменных
-		start_time_c = start_time
-		step_c = step
-		end_time_c = end_time
+	def gen_signal(self):
 
 		#Создание дискретов времени
-		self.xpoints = self.__time_step(start_time_c, step_c, end_time_c)
+		self.xpoints = arange(start = self.__start_time, stop = self.__end_time,
+							  step = self.__step_time)
 		self.xpoints_sec = self.to_seconds(self.xpoints)
 
 		#Создание пустых массивов точек
@@ -75,16 +85,8 @@ class Radiopulse():
 		return signal
 
 	def send_test(self):
-		print("I am working")
-
-	def __time_step(self, start, step, end):
-		rang = []
-		point = start
-		rang.append(point)
-		while point < end:
-			point += step
-			rang.append(point)
-		return rang
+		r = 'Григорий'
+		print("I am working\n But you NOOOOT, %s\n" % r)
 
 	def to_seconds(self, lst):
 		rang = []

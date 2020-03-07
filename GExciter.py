@@ -6,11 +6,13 @@ Created on Fri Feb 14 21:21:17 2020
 @author: Григорий
 @author: Ivan
 """
+import sys                              #System function
+import Mimp                             #User interface classes
 
-from Mimp import *
+from PyQt5.QtWidgets import QApplication
+from Radiopulse import *
+from ExciterObj import *                #TODO(Григорий): Make refactoring
 
-app = QApplication([])
-ui = uic.loadUi("Exciter.ui")
 type_of_signal = "test"
 
 def close(): #Закрыть
@@ -47,16 +49,22 @@ def LNF(): #ЛЧМ
         global type_of_signal
         type_of_signal = "LNF"
 
+app = QApplication(sys.argv)
+ui = Mimp.DemoWindow()
+
+""" Реализация конструктора UI """
+#ui = uic.loadUi("Exciter.ui")
 
 #Привязка кнопок
-ui.pushButton.clicked.connect(close)
-ui.pushButton_2.clicked.connect(plotb)
-ui.radioButton.toggled.connect(LNF)
-ui.radioButton_2.toggled.connect(NLNF)
+#ui.pushButton.clicked.connect(close)
+#ui.pushButton_2.clicked.connect(plotb)
+#ui.radioButton.toggled.connect(LNF)
+#ui.radioButton_2.toggled.connect(NLNF)
 
 #Создание виджета графика
-m = PlotCanvas(ui.PlotWidget, 3, 3, 100)
-m.move(0, 0)
+#m = PlotCanvas(ui.PlotWidget, 3, 3, 100)
+#m.move(0, 0)
+""" Конец реализации конструктора """
 
 ui.show()
-exit(app.exec_())
+sys.exit(app.exec_())

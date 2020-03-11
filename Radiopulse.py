@@ -3,17 +3,20 @@ import math
 class Radiopulse():
 	#Конструктор объекта
 	def __init__(self, length = 2.0, period_pulse = 4.0, number = 10,\
-				 period_packet = 100, frequency = 2, st = 0.0,\
-				 stp = 0.001, nd = 99.0, amplify = 1):
-		self.__length = length
-		self.__period_pulse = period_pulse
-		self.__number = number
-		self.__period_packet = period_packet
-		self.__frequency = frequency
-		self.__amplify = amplify
-		self.gen_signal(st, stp, nd)
+				 period_packet = 100, frequency = 2, start_time = 0.1,\
+				 step_time = 0.01, end_time = 99.0, amplify = 1):
+            self.__length = length
+            self.__period_pulse = period_pulse
+            self.__number = number
+            self.__period_packet = period_packet
+            self.__frequency = frequency
+            self.__amplify = amplify
+            self.__start_time  = start_time
+            self.__step_time = start_time
+            self.__end_time  = end_time
+            self.gen_signal()
 
-	#Конфигуратор объекта
+	#Конфигуратор сигнала
 	def configure(self, length = None, period_pulse = None,
 				  number = None, period_packet = None,
 				  frequency = None, amplify = None):
@@ -29,17 +32,24 @@ class Radiopulse():
 			self.__frequency = frequency
 		if (amplify != None):
 			self.__amplify = amplify
+		self.gen_signal()
 
+	#Конфигуратор времени
+	def time_configure(self, start_time = None, step_time = None, end_time = None):
+		if (start_time != None):
+			self.__start_time = start_time
+		if (step_time != None):
+			self.__step_time = step_time
+		if (end_time != None):
+			self.__end_time = end_time
+		self.gen_signal()
+		
 	#Функция генерирования массивов точек радиосигнала
-	def gen_signal(self,start_time, step, end_time):
-		#Инициализация внутренних переменных
-		start_time_c = start_time
-		step_c = step
-		end_time_c = end_time
+	def gen_signal(self):
 
 		#Создание дискретов времени
-		self.xpoints = self.__time_step(start_time_c, step_c, end_time_c)
-		self.xpoints_sec = self.to_seconds(self.xpoints)
+		self.xpoints = self.arange(start = self.__start_time, stop = self.__end_time,
+							  step = self.__step_time)
 
 		#Создание пустых массивов точек
 		self.Ipoints = []		#Косинусоидальная квадратура сигнала
@@ -64,30 +74,25 @@ class Radiopulse():
 					self.Zpoints.append(0)
 				else:
 					self.Ipoints.append(self.garmonic(in_time_c, self.__frequency,
-													  self.__amplify))
-					self.Qpoints.append(self.garmonic(in_time_c, self.__frequency, 
-													  self.__amplify, phs = math.pi/2))
+
+										self.__amplify))
+					self.Qpoints.append(self.garmonic(in_time_c, self.__frequency,
+									    self.__amplify, phs = math.pi/2))
 					self.Zpoints.append(self.Ipoints[-1] - self.Qpoints[-1])
-	
+
 	#Функция гармонического сигнала
 	def garmonic(self, tm, freq, amp = 1.0, phs = 0.0):
 		signal = amp * math.sin((2 * math.pi * freq * tm) + phs)
 		return signal
 
 	def send_test(self):
-		print("I am working")
+		r = 'Григорий'
+		print("I am working\n But you NOOOOT, %s\n" % r)
 
-	def __time_step(self, start, step, end):
+	def arange(self, start, stop, step):
 		rang = []
 		point = start
-		rang.append(point)
-		while point < end:
-			point += step
+		while (point < stop):
 			rang.append(point)
-		return rang
-
-	def to_seconds(self, lst):
-		rang = []
-		for point in range(0, len(lst)):
-			rang.append(lst[point]/1000000)
+			point += step
 		return rang

@@ -74,6 +74,7 @@ class Radiopulse():
 					self.Zpoints.append(0)
 				else:
 					self.Ipoints.append(self.garmonic(in_time_c, self.__frequency,
+
 										self.__amplify))
 					self.Qpoints.append(self.garmonic(in_time_c, self.__frequency,
 									    self.__amplify, phs = math.pi/2))

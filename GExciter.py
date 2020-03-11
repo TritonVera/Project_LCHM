@@ -22,6 +22,7 @@ def close(): #Закрыть
 def plotb(): #Построить
 
     """Вставка функции для реализации пачки радиоимпульсов"""
+
     if ui.radio_radiobutton.isChecked():
         #radio.send_test()
         ui.plot.draw_plot(radio.xpoints, radio.Ipoints)

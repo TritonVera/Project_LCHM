@@ -17,34 +17,60 @@ type_of_signal = "test"
 
 def close(): #Закрыть
 
-    ui.close()
+    sys.exit(app.exec_())
 
 def plotb(): #Построить
 
     """Вставка функции для реализации пачки радиоимпульсов"""
-    if ui.radio_radiobutton.isChecked() == True:
-        radio = Radiopulse(amplify = ui.ku_spinbox.value())
+    if ui.radio_radiobutton.isChecked():
         #radio.send_test()
         ui.plot.draw_plot(radio.xpoints, radio.Ipoints)
-        return
-    """Конец вставки"""
-
-    n = SignalObj(type_of_signal) #Заполнение массивов времени и значения сигнала
-    #KU = ui.doubleSpinBox.value()
-    #n.UM(KU) #Умножение значений на коэффициент усиления
-    m.plot() #Построение графика
+    else:
+        n = SignalObj(type_of_signal) #Заполнение массивов времени и значения сигнала
+        KU = ui.ku_spinbox.value()
+        n.UM(KU) #Умножение значений на коэффициент усиления
+        ui.plot.draw_plot(Time, Sign) #Построение графика
 
 def NLNF(): #НЛЧМ
 
     if ui.nlchm_radiobutton.isChecked() == True:
         global type_of_signal
         type_of_signal = "NLNF"
+    plotb()
 
 def LNF(): #ЛЧМ
 
     if ui.lchm_radiobutton.isChecked() == True:
         global type_of_signal
         type_of_signal = "LNF"
+    plotb()
+
+def redraw_plot_start():
+
+    start = ui.time_start_spinbox.value()
+    stop = ui.time_stop_spinbox.value()
+    if (stop < start):
+        ui.time_stop_spinbox.setValue(ui.time_start_spinbox.value() + 1)
+    radio.time_configure(start_time = start, end_time = stop)
+    plotb()
+
+
+def redraw_plot_stop():
+
+    start = ui.time_start_spinbox.value()
+    stop = ui.time_stop_spinbox.value()
+    if (stop < start):
+        ui.time_start_spinbox.setValue(ui.time_stop_spinbox.value() - 1)
+    radio.time_configure(start_time = start, end_time = stop)
+    plotb()
+
+
+def redraw_plot_amplify():
+
+    amplify = ui.ku_spinbox.value()
+    radio.configure(amplify = amplify)
+    plotb()
+
 
 app = QApplication(sys.argv)
 ui = UI.DemoWindow()
@@ -53,11 +79,17 @@ ui = UI.DemoWindow()
 #ui = uic.loadUi("Exciter.ui")
 
 #Привязка кнопок
-ui.ku_spinbox.valueChanged.connect(plotb)
 ui.radio_radiobutton.toggled.connect(plotb)
-#ui.lchm_radioButton.toggled.connect(LNF)
-#ui.nlchm_radioButton.toggled.connect(NLNF)
+ui.lchm_radiobutton.toggled.connect(LNF)
+ui.nlchm_radiobutton.toggled.connect(NLNF)
+ui.exit_button.clicked.connect(close)
 
+#Привязка изменения значения в спинбоксах
+ui.ku_spinbox.valueChanged.connect(redraw_plot_amplify)
+ui.time_stop_spinbox.valueChanged.connect(redraw_plot_stop)
+ui.time_start_spinbox.valueChanged.connect(redraw_plot_start)
+
+radio = Radiopulse(amplify = ui.ku_spinbox.value())
 """ Конец реализации конструктора """
 
 ui.show()

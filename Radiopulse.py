@@ -1,5 +1,4 @@
 import math
-from numpy import arange
 
 class Radiopulse():
 	#Конструктор объекта
@@ -33,6 +32,7 @@ class Radiopulse():
 			self.__frequency = frequency
 		if (amplify != None):
 			self.__amplify = amplify
+		self.gen_signal()
 
 	#Конфигуратор времени
 	def time_configure(self, start_time = None, step_time = None, end_time = None):
@@ -42,14 +42,14 @@ class Radiopulse():
 			self.__step_time = step_time
 		if (end_time != None):
 			self.__end_time = end_time
+		self.gen_signal()
 		
 	#Функция генерирования массивов точек радиосигнала
 	def gen_signal(self):
 
 		#Создание дискретов времени
-		self.xpoints = arange(start = self.__start_time, stop = self.__end_time,
+		self.xpoints = self.arange(start = self.__start_time, stop = self.__end_time,
 							  step = self.__step_time)
-		self.xpoints_sec = self.to_seconds(self.xpoints)
 
 		#Создание пустых массивов точек
 		self.Ipoints = []		#Косинусоидальная квадратура сигнала
@@ -88,8 +88,10 @@ class Radiopulse():
 		r = 'Григорий'
 		print("I am working\n But you NOOOOT, %s\n" % r)
 
-	def to_seconds(self, lst):
+	def arange(self, start, stop, step):
 		rang = []
-		for point in range(0, len(lst)):
-			rang.append(lst[point]/1000000)
+		point = start
+		while (point < stop):
+			rang.append(point)
+			point += step
 		return rang

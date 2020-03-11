@@ -19,7 +19,7 @@ from matplotlib.figure import Figure
 
 #Класс графического полотна
 class PlotCanvas(FigureCanvas):
-    def __init__(self, parent = None ,width = 5 ,height = 3 ,dpi = 100):
+    def __init__(self, parent = None ,width = 4 ,height = 3 ,dpi = 100):
 
         fig = Figure(figsize = (width, height), dpi = dpi)
         self.axes = fig.add_subplot(111)
@@ -40,7 +40,8 @@ class PlotCanvas(FigureCanvas):
             self.axes.plot(x_point, y_point)
             self.draw()
         else:
-            self.axes.plot([0, 100], [0, 0], 'r')
+            pass
+            #self.axes.plot([0, 100], [0, 0], 'r')
 
 #Класс главного окна
 class DemoWindow(QMainWindow):
@@ -62,7 +63,7 @@ class DemoWindow(QMainWindow):
         self.main_grid.addWidget(left_panel, 0, 0, 2, 1)
 
         plot_place = self.create_plot_place()
-        self.main_grid.addWidget(plot_place, 0, 1, 1, 2)
+        self.main_grid.addWidget(plot_place, 0, 1)
 
         time_panel = self.create_button_panel()
         self.main_grid.addWidget(time_panel, 1, 1)
@@ -71,8 +72,8 @@ class DemoWindow(QMainWindow):
 
     def create_main_widget(self):
         self.main_widget = QWidget()
-        self.main_widget.setMinimumSize(640, 480)
-        self.main_widget.setGeometry(300, 300, 640, 480)
+        self.main_widget.setMinimumSize(740, 480)
+        self.main_widget.setGeometry(300, 300, 740, 480)
         self.setCentralWidget(self.main_widget)
 
     def create_left_panel(self):
@@ -85,7 +86,7 @@ class DemoWindow(QMainWindow):
         amplifier_box = QGroupBox(left_widget)
 
         #Configure geometry
-        exciter_box.setMinimumSize(250, 350)
+        exciter_box.setMinimumSize(250, 345)
         exciter_box.setMaximumSize(250, self.max_pixel_size)
         amplifier_box.setMinimumSize(250, 100)
         amplifier_box.setMaximumSize(250, 100)
@@ -105,8 +106,8 @@ class DemoWindow(QMainWindow):
 
         #Configure radiobuttons
         self.radio_radiobutton.setChecked(1)
-        self.lchm_radiobutton.setDisabled(1)
-        self.nlchm_radiobutton.setDisabled(1)
+        #self.lchm_radiobutton.setDisabled(1)
+        #self.nlchm_radiobutton.setDisabled(1)
 
         #Create label
         ku_label = QLabel("Коэф. усиления:", amplifier_box)
@@ -115,9 +116,10 @@ class DemoWindow(QMainWindow):
         self.ku_spinbox = QDoubleSpinBox(amplifier_box)
 
         #Configure spinbox
-        self.ku_spinbox.setMinimum(0.01)
-        self.ku_spinbox.setMaximum(100)
+        self.ku_spinbox.setRange(0.1, 100)
         self.ku_spinbox.setSuffix(" раз")
+        self.ku_spinbox.setValue(1)
+        self.ku_spinbox.setSingleStep(0.1)
 
         #Pack radiobuttons
         inner_grid_layout.addWidget(self.lchm_radiobutton, 0, 0)
@@ -147,19 +149,40 @@ class DemoWindow(QMainWindow):
         plot_widget.setLayout(horizontal_layout)
         return plot_widget
 
-    def create_button_panel(self):              #TODO(Ivan): Create function
+    def create_button_panel(self):
         time_changed_widget = QWidget(self.main_widget)
         simple_layout = QHBoxLayout(time_changed_widget)
 
         time_box = QGroupBox(time_changed_widget)
-        time_box.setMinimumSize(450, 100)
-        time_box.setMaximumSize(self.max_pixel_size, 100)
+        time_box.setMinimumSize(400, 100)
+        time_box.setTitle("Управление")
 
+        grid_manage = QGridLayout(time_box)
+
+        #Create box elements
+        time_start_label = QLabel("Начальная точка", time_box)
+        time_stop_label = QLabel("Конечная точка", time_box)
         self.time_start_spinbox = QDoubleSpinBox(time_box)
         self.time_stop_spinbox = QDoubleSpinBox(time_box)
+        #self.plot_button = QPushButton("Построить", time_box)
+        self.exit_button = QPushButton("Выход", time_box)
 
+        #Configure spinboxes
+        self.time_start_spinbox.setRange(0.00, 1000)
+        self.time_stop_spinbox.setRange(0.1, 1000.1)
+        self.time_stop_spinbox.setValue(100.0)
+
+        #Add elememts to grid packer
+        grid_manage.addWidget(time_start_label, 0, 0)
+        grid_manage.addWidget(time_stop_label, 0, 1)
+        grid_manage.addWidget(self.time_start_spinbox, 1, 0)
+        grid_manage.addWidget(self.time_stop_spinbox, 1, 1)
+        #grid_manage.addWidget(self.plot_button, 1, 2)
+        grid_manage.addWidget(self.exit_button, 1, 3)
+
+
+        time_box.setLayout(grid_manage)
         simple_layout.addWidget(time_box)
-
         time_changed_widget.setLayout(simple_layout)
 
         return time_changed_widget

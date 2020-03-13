@@ -8,3 +8,4 @@ class SetupWindow(QGroupBox):
     def __init__(self, parent = None):
         QGroupBox.__init__(self, parent)
         print(parent)
+        self.setDisabled(1)

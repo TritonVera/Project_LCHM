@@ -115,7 +115,6 @@ class DemoWindow(QMainWindow):
         ku_label = QLabel("Коэф. усиления:", amplifier_box)
         setup_radio_label = MyLabel("Настроить", exciter_box, self.main_widget)
         setup_radio_label.setAlignment(Qt.AlignRight)
-        setup_radio_label.setup_window.move(100, 100)
 
         #Create spinbox
         self.ku_spinbox = QDoubleSpinBox(amplifier_box)
@@ -223,4 +222,8 @@ class MyLabel(QLabel):
             position_x = self.x() + self.width() + 20
             position_y = self.y() + self.height() / 2
             self.setup_window.move(position_x, position_y)
+            self.setup_window.setEnabled(1)
+        else:
+            self.setup_window.setEnabled(0)
+
             #del(self.setup_window)

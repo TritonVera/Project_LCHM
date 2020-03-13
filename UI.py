@@ -70,6 +70,7 @@ class DemoWindow(QMainWindow):
 
         self.main_widget.setLayout(self.main_grid)
 
+
     def create_main_widget(self):
         self.main_widget = QWidget()
         self.main_widget.setMinimumSize(740, 480)
@@ -111,6 +112,9 @@ class DemoWindow(QMainWindow):
 
         #Create label
         ku_label = QLabel("Коэф. усиления:", amplifier_box)
+        setup_radio_label = MyLabel("Настроить", exciter_box, self.main_widget)
+        setup_radio_label.setAlignment(Qt.AlignRight)
+        setup_radio_label.setup_window.move(100, 100)
 
         #Create spinbox
         self.ku_spinbox = QDoubleSpinBox(amplifier_box)
@@ -125,6 +129,7 @@ class DemoWindow(QMainWindow):
         inner_grid_layout.addWidget(self.lchm_radiobutton, 0, 0)
         inner_grid_layout.addWidget(self.nlchm_radiobutton, 1, 0)
         inner_grid_layout.addWidget(self.radio_radiobutton, 2, 0)
+        inner_grid_layout.addWidget(setup_radio_label, 2, 1)
 
         #Pack label
         inner_horizontal_layout.addWidget(ku_label)
@@ -187,6 +192,7 @@ class DemoWindow(QMainWindow):
 
         return time_changed_widget
 
+
     def about(self):
         QMessageBox.about(self, "About",
                                     """embedding_in_qt5.py demonstartion
@@ -197,3 +203,32 @@ This program is a demonstration of excite signal in receiver.
 It may be used and modified with no restriction; raw copies as well as
 modified versions may be distributed without limitation."""
                                 )
+
+
+class MyLabel(QLabel):
+    def __init__ (self, text = None, parent = None, subparent = None):
+        QLabel.__init__(self, text, parent)
+        self.subparent = subparent
+        self.setMouseTracking(1)
+        self.setup_window = SetupWindow(self.subparent)
+
+    def mouseMoveEvent(self, event):
+        posx = event.x()
+        posy = event.y()
+        print("Координаты:\n x = %d  y = %d" % (posx, posy))
+
+        if posx > 38 and posy > 3 and posy < 15:
+            print("Координаты:\n x = %d  y = %d" % (posx, posy))
+            self.setup_window.move(posx, posy)
+        else:
+            pass
+            #del(self.setup_window)
+
+
+
+class SetupWindow(QGroupBox):
+    def __init__(self, parent = None):
+        QGroupBox.__init__(self, parent)
+        print(parent)
+
+

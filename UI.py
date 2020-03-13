@@ -16,6 +16,7 @@ from PyQt5.QtWidgets import QMainWindow, QGridLayout, QSizePolicy, \
 from PyQt5.QtCore import Qt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from SetupWindow import *
 
 #Класс графического полотна
 class PlotCanvas(FigureCanvas):
@@ -219,16 +220,7 @@ class MyLabel(QLabel):
 
         if posx > 38 and posy > 3 and posy < 15:
             print("Координаты:\n x = %d  y = %d" % (posx, posy))
-            self.setup_window.move(posx, posy)
-        else:
-            pass
+            position_x = self.x() + self.width() + 20
+            position_y = self.y() + self.height() / 2
+            self.setup_window.move(position_x, position_y)
             #del(self.setup_window)
-
-
-
-class SetupWindow(QGroupBox):
-    def __init__(self, parent = None):
-        QGroupBox.__init__(self, parent)
-        print(parent)
-
-

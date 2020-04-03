@@ -11,7 +11,7 @@ import UI                             #User interface classes
 
 from PyQt5.QtWidgets import QApplication
 from Radiopulse import *
-from ExciterObj import Signal                #TODO(Григорий): Make refactoring
+from ExciterObj import SignalCl                #TODO(Григорий): Make refactoring
 
 type_of_signal = "LNF"
 
@@ -26,7 +26,7 @@ def plotb(): #Построить
     if ui.radio_radiobutton.isChecked():
         ui.plot.draw_plot(radio.xpoints, radio.Ipoints)
     else:
-        Time, Value = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
+        Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
         ui.plot.draw_plot(Time, Value)
 
 def NLNF(): #НЛЧМ
@@ -90,7 +90,7 @@ ui.time_stop_spinbox.valueChanged.connect(redraw_plot_stop)
 ui.time_start_spinbox.valueChanged.connect(redraw_plot_start)
 
 radio = Radiopulse(amplify = ui.ku_spinbox.value())
-radio_mod = Signal() 
+radio_mod = SignalCl() 
 """ Конец реализации конструктора """
 
 ui.show()

@@ -27,7 +27,7 @@ deltaW_L = 2*pi*deltaF*4
 imp = 100*Mult
 space = 25*Mult
 
-class Signal:
+class SignalCl:
 
     def __init__(self):
         
@@ -57,21 +57,27 @@ class Signal:
             K = int(now/T)
             
             self.Time[i] = (now - space)/Mult
-            self.Signal[i]= self.Amplify*Signals[type_of_signal](now-K*T-space)
+            self.Signal[i], self.I[i], self.Q[i] = Signals[type_of_signal](now-K*T-space)
             
             if now >= T*K and now < T*K+space:
                 self.Signal[i] = 0
+                self.I[i] = 0
+                self.Q[i] = 0
+            
+            self.Signal[i] = self.Signal[i]*self.Amplify
+            self.I[i] = self.I[i]*self.Amplify
+            self.Q[i] = self.Q[i]*self.Amplify
         
-        return(self.Time, self.Signal)
+        return(self.Time, self.Signal, self.I, self.Q)
 
     def NLNF(self,i):
 
-        fi_t = (deltaW_N/Omega)*sin(Omega*i+F0) 
+        fi_t = (deltaW_N/Omega)*sin(Omega*i+F0)
         I = A*cos(fi_t+fi0)
         Q = A*sin(fi_t+fi0)
         S = I*cos(w0*i)-Q*sin(w0*i)
 
-        return(S)
+        return(S,I,Q)
 
     def LNF(self,i):
         
@@ -83,7 +89,7 @@ class Signal:
         Q = A*sin(fi_t+fi0)
         S = I*cos(w0*i)-Q*sin(w0*i)
 
-        return(S)
+        return(S,I,Q)
         
 
         

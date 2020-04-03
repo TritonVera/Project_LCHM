@@ -5,85 +5,85 @@ Created on Sat Feb 29 15:28:34 2020
 
 @author: Григорий
 """
-from matplotlib import pyplot
 from math import cos,sin,pi
 
-A = 1
-f = 400000
-deltaF = 0.5*f
-Omega = 2*pi*20000
-NT = 2
+#Предполагаем входное время со следующим множителем:
+Mult = 10**-6
 
+#Параметры несущей
+A = 1
+f = 200000*0.5
+Omega = 2*pi*(1/100)*10**6
 w0 = 2*pi*f
-deltaW = 2*pi*deltaF
 F0 = 0
 fi0 = 0
-imp = 100*10**-6
-k = deltaW/imp
-dopt = 0.01*10**-3
-dop = round(dopt*(f+deltaW)*100)
 
-N = round(imp*(f+deltaW)*100)
-S = [0]*(N+dop)
-T = [i*(imp+dopt)/(N+dop) for i in range (0,N+dop)]
+#Отклонение по частоте
+deltaF = 0.5*f
+deltaW_N = 2*pi*deltaF
+deltaW_L = 2*pi*deltaF*4
 
-Sign = [0]*len(S)*NT
-Time = [i*(imp+dopt)/(N+dop) for i in range(0,(N+dop)*NT)]
+#Параметры импульса
+imp = 100*Mult
+space = 25*Mult
 
+class Signal:
 
-class SignalObj:
+    def __init__(self):
+        
+        self.Configure()
 
-    def __init__(self,tf):
+        
+    def Configure(self, Start = 0, Stop = 100):
+        
+        self.time = Stop - Start
+        self.dots_per_osc = 100
 
-        self.tofs = tf
-        self.signal_Tlen(N,dop)
-        self.signal()
+        self.Signal = [0]*int(self.time*Mult*(f+deltaF)*self.dots_per_osc)
+        self.I = [0]*len(self.Signal)
+        self.Q = [0]*len(self.Signal)
+        self.Time = [0]*len(self.Signal)
+        
+        return(0)
 
+    def Gen_Signal(self,Amplify,type_of_signal):
+        
+        self.Amplify = Amplify
+        Signals = {'LNF':self.LNF,'NLNF':self.NLNF}
+        T = imp + space
+        
+        for i in range(0,len(self.Time)):
+            now = i/(self.dots_per_osc*(f+deltaF))+space
+            K = int(now/T)
+            
+            self.Time[i] = (now - space)/Mult
+            self.Signal[i]= self.Amplify*Signals[type_of_signal](now-K*T-space)
+            
+            if now >= T*K and now < T*K+space:
+                self.Signal[i] = 0
+        
+        return(self.Time, self.Signal)
 
-    def NLNF(self,i): #НЛЧМ
+    def NLNF(self,i):
 
-        fi_t = (deltaW/Omega)*sin(Omega*i+F0)+fi0
-        I = A*cos(fi_t)
-        Q = A*sin(fi_t)
+        fi_t = (deltaW_N/Omega)*sin(Omega*i+F0) 
+        I = A*cos(fi_t+fi0)
+        Q = A*sin(fi_t+fi0)
         S = I*cos(w0*i)-Q*sin(w0*i)
 
         return(S)
 
-    def LNF(self,i): #ЛЧМ
+    def LNF(self,i):
+        
 
-        w = k*i+w0
-        S =A*cos(w*i+fi0)
+        fi_t = (deltaW_L/imp)*i**2
+#        if  i < 0.5*Mult or i > 99*Mult:  
+#            print(i/Mult," ",(w0 + (deltaW/imp)*i)/(2*pi))
+        I = A*cos(fi_t+fi0)
+        Q = A*sin(fi_t+fi0)
+        S = I*cos(w0*i)-Q*sin(w0*i)
 
         return(S)
+        
 
-    def signal_Tlen(self,Ns,dops): #Заполнение периода значений сигнала
-
-        for i in range (0,Ns+dops):
-
-            if i<Ns:
-                if self.tofs == "NLNF":
-                    S[i] = self.NLNF(imp*i/N)
-                if self.tofs == "LNF":
-                    S[i] = self.LNF(imp*i/N)
-            else:
-                S[i] = 0
-
-        return(0)
-
-    def signal(self): #Заполнение значений всего сигнала
-
-        for i in range(1,NT+1):
-            for j in range(0,N+dop):
-                Sign[j] = S[j]
-                if (i>1) :
-                    Sign[j+(i-1)*(N+dop)] = S[j]
-
-        return(0)
-
-    def UM(self,KU): #Умножение на коэффициент усилиния
-
-        for i in range(0,len(S)*NT):
-            Sign[i] = Sign[i]*KU
-
-        return(0)
-
+        

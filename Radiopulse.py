@@ -86,7 +86,7 @@ class Radiopulse():
 		return signal
 
 	def send_test(self):
-		r = 'Григорий'
+		r = 'Test'
 		print("I am working\n But you NOOOOT, %s\n" % r)
 
 	def arange(self, start, stop, step):

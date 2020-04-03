@@ -53,15 +53,14 @@ class MyLabel(QLabel):
     def mouseMoveEvent(self, event):
         posx = event.x()
         posy = event.y()
-        print("Координаты:\n x = %d  y = %d" % (posx, posy))
+        #print("Координаты:\n x = %d  y = %d" % (posx, posy))
 
         if posx > 38 and posy > 3 and posy < 15:
             print("Координаты:\n x = %d  y = %d" % (posx, posy))
-            position_x = self.x() + self.width() + 20
+            position_x = self.x() + posx + 20
             position_y = self.y() + self.height() / 2
             self.setup_window.move(position_x, position_y)
             self.setup_window.setEnabled(1)
         else:
-            self.setup_window.setEnabled(0)
-
-            #del(self.setup_window)
+            print("Another")
+            #del(self.setup_window);

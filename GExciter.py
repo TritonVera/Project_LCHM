@@ -25,7 +25,8 @@ def plotb(): #Построить
 
     if ui.radio_radiobutton.isChecked():
         #radio.send_test()
-        ui.plot.draw_plot(radio.xpoints, radio.Ipoints)
+        ui.up_plot.draw_plot(radio.xpoints, radio.Ipoints)
+        ui.down_plot.draw_plot(radio.xpoints, radio.Zpoints)
     else:
         n = SignalObj(type_of_signal) #Заполнение массивов времени и значения сигнала
         KU = ui.ku_spinbox.value()

@@ -30,21 +30,24 @@ class DemoWindow(QMainWindow):
         self.main_grid = QGridLayout(self.main_widget)
 
         left_panel = self.create_left_panel()
-        self.main_grid.addWidget(left_panel, 0, 0, 2, 1)
+        self.main_grid.addWidget(left_panel, 0, 0, 3, 1)
 
-        plot_place = self.create_plot_place()
-        self.main_grid.addWidget(plot_place, 0, 1)
+        up_plot_place = self.create_plot_place()
+        self.main_grid.addWidget(up_plot_place, 0, 1)
+
+        down_plot_place = self.create_plot_place()
+        self.main_grid.addWidget(down_plot_place, 1, 1)
 
         time_panel = self.create_button_panel()
-        self.main_grid.addWidget(time_panel, 1, 1)
+        self.main_grid.addWidget(time_panel, 2, 1)
 
         self.main_widget.setLayout(self.main_grid)
 
 
     def create_main_widget(self):
         self.main_widget = QWidget()
-        self.main_widget.setMinimumSize(740, 480)
-        self.main_widget.setGeometry(300, 300, 740, 480)
+        self.main_widget.setMinimumSize(740, 640)
+        self.main_widget.setGeometry(200, 200, 740, 640)
         self.setCentralWidget(self.main_widget)
 
     def create_left_panel(self):

@@ -72,6 +72,7 @@ dkms.conf
 local*
 .idea/
 .vscode/
+__pycache__/
 .DS_Store
 venv
 *.log

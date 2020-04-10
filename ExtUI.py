@@ -11,13 +11,18 @@ from matplotlib.figure import Figure
 
 #Класс графического полотна
 class PlotCanvas(FigureCanvas):
-    def __init__(self, parent = None ,width = 4 ,height = 3 ,dpi = 100):
-
+    def __init__(self, parent = None ,width = 4.5 ,height = 3 ,dpi = 100):  # width = 400px, height = 300 px
         fig = Figure(figsize = (width, height), dpi = dpi)
-        self.axes = fig.add_subplot(111)
+
+        # Верхний график
+        self.first_axes = fig.add_subplot(211)
+
+        # Нижний график
+        self.second_axes = fig.add_subplot(212)
 
         self.draw_plot()
 
+        # Сервисные функции
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
 
@@ -26,10 +31,23 @@ class PlotCanvas(FigureCanvas):
                                    QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
-    def draw_plot(self, x_point = [], y_point = []):
-        if (x_point != [] and y_point != []):
-            self.axes.cla()
-            self.axes.plot(x_point, y_point)
+    def draw_plot(self, x_point = [], y_point_I = [], y_point_Q = [], y_point_Z = []):
+        # Перегрузка метода draw_plot
+        if (x_point != [] and y_point_I != [] and 
+            y_point_Q != []):
+            # Очистка полотен
+            self.first_axes.cla()
+            self.second_axes.cla()
+
+            # Инициализация графиков
+            if (y_point_I != []):
+                self.first_axes.plot(x_point, y_point_I)
+            if (y_point_Q != []):
+                self.first_axes.plot(x_point, y_point_Q)
+            if (y_point_Z != []):
+                self.second_axes.plot(x_point, y_point_Z)
+
+            # Вывод графиков
             self.draw()
         else:
             pass

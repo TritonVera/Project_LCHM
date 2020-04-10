@@ -17,7 +17,7 @@ type_of_signal = "LNF"
 
 def close(): #Закрыть
 
-    sys.exit(app.exec_())
+    sys.exit()
 
 def plotb(): #Построить
 
@@ -25,11 +25,10 @@ def plotb(): #Построить
 
     if ui.radio_radiobutton.isChecked():
         #radio.send_test()
-        ui.up_plot.draw_plot(radio.xpoints, radio.Ipoints)
-        ui.down_plot.draw_plot(radio.xpoints, radio.Zpoints)
+        ui.plot.draw_plot(radio.xpoints, radio.Ipoints, radio.Qpoints, radio.Zpoints)
     else:
         Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
-        ui.plot.draw_plot(Time, Value)
+        ui.plot.draw_plot(Time, Value_I, Value_Q, Value)
 
 def NLNF(): #НЛЧМ
 
@@ -85,6 +84,7 @@ ui.radio_radiobutton.toggled.connect(plotb)
 ui.lchm_radiobutton.toggled.connect(LNF)
 ui.nlchm_radiobutton.toggled.connect(NLNF)
 ui.exit_button.clicked.connect(close)
+ui.plot_button.clicked.connect(plotb)
 
 #Привязка изменения значения в спинбоксах
 ui.ku_spinbox.valueChanged.connect(redraw_plot_amplify)

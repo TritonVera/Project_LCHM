@@ -5,43 +5,13 @@ Created on Sat Feb 29 15:10:12 2020
 @author: Григорий
 @author: Ivan
 """
-import matplotlib
-
-matplotlib.use('Qt5Agg')
 
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QSizePolicy, \
                             QMessageBox, QWidget, QGroupBox, QRadioButton, \
                             QVBoxLayout, QLabel, QHBoxLayout, QPushButton, \
                             QDoubleSpinBox
 from PyQt5.QtCore import Qt
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-
-#Класс графического полотна
-class PlotCanvas(FigureCanvas):
-    def __init__(self, parent = None ,width = 4 ,height = 3 ,dpi = 100):
-
-        fig = Figure(figsize = (width, height), dpi = dpi)
-        self.axes = fig.add_subplot(111)
-
-        self.draw_plot()
-
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
-
-        FigureCanvas.setSizePolicy(self,
-                                   QSizePolicy.Expanding,
-                                   QSizePolicy.Expanding)
-        FigureCanvas.updateGeometry(self)
-
-    def draw_plot(self, x_point = [], y_point = []):
-        if (x_point != [] and y_point != []):
-            self.axes.cla()
-            self.axes.plot(x_point, y_point)
-            self.draw()
-        else:
-            pass
-            #self.axes.plot([0, 100], [0, 0], 'r')
+from ExtUI import MyLabel, PlotCanvas, SetupWindow
 
 #Класс главного окна
 class DemoWindow(QMainWindow):
@@ -62,24 +32,28 @@ class DemoWindow(QMainWindow):
         left_panel = self.create_left_panel()
         self.main_grid.addWidget(left_panel, 0, 0, 2, 1)
 
-        plot_place = self.create_plot_place()
-        self.main_grid.addWidget(plot_place, 0, 1)
+        up_plot_place = self.create_plot_place()
+        self.main_grid.addWidget(up_plot_place, 0, 1, 1, 2)
 
-        time_panel = self.create_button_panel()
+        time_panel = self.create_time_panel()
         self.main_grid.addWidget(time_panel, 1, 1)
+
+        button_panel = self.create_button_panel()
+        self.main_grid.addWidget(button_panel, 1, 2)
 
         self.main_widget.setLayout(self.main_grid)
 
+
     def create_main_widget(self):
         self.main_widget = QWidget()
-        self.main_widget.setMinimumSize(740, 480)
-        self.main_widget.setGeometry(300, 300, 740, 480)
+        self.main_widget.setMinimumSize(800, 640)
+        self.main_widget.setGeometry(200, 200, 800, 640)
         self.setCentralWidget(self.main_widget)
 
     def create_left_panel(self):
         #Create main widget and layout
         left_widget = QWidget(self.main_widget)
-        vertical_layout = QVBoxLayout(self.main_widget)
+        vertical_layout = QVBoxLayout()
 
         #Create groupboxes
         exciter_box = QGroupBox(left_widget)
@@ -111,6 +85,8 @@ class DemoWindow(QMainWindow):
 
         #Create label
         ku_label = QLabel("Коэф. усиления:", amplifier_box)
+        # setup_radio_label = MyLabel("Настроить", exciter_box, self.main_widget)
+        # setup_radio_label.setAlignment(Qt.AlignRight)
 
         #Create spinbox
         self.ku_spinbox = QDoubleSpinBox(amplifier_box)
@@ -125,6 +101,7 @@ class DemoWindow(QMainWindow):
         inner_grid_layout.addWidget(self.lchm_radiobutton, 0, 0)
         inner_grid_layout.addWidget(self.nlchm_radiobutton, 1, 0)
         inner_grid_layout.addWidget(self.radio_radiobutton, 2, 0)
+        # inner_grid_layout.addWidget(setup_radio_label, 2, 1)
 
         #Pack label
         inner_horizontal_layout.addWidget(ku_label)
@@ -141,21 +118,23 @@ class DemoWindow(QMainWindow):
 
     def create_plot_place(self):
         plot_widget = QWidget(self.main_widget)
-        horizontal_layout = QHBoxLayout(plot_widget)
+        vertical_layout = QVBoxLayout()
 
         self.plot = PlotCanvas(plot_widget)
-        horizontal_layout.addWidget(self.plot)
+        vertical_layout.addWidget(self.plot)
 
-        plot_widget.setLayout(horizontal_layout)
+        plot_widget.setLayout(vertical_layout)
         return plot_widget
 
-    def create_button_panel(self):
+    def create_time_panel(self):
         time_changed_widget = QWidget(self.main_widget)
-        simple_layout = QHBoxLayout(time_changed_widget)
+        simple_layout = QHBoxLayout()
 
         time_box = QGroupBox(time_changed_widget)
-        time_box.setMinimumSize(400, 100)
-        time_box.setTitle("Управление")
+        time_box.setMinimumSize(320, 100)
+        time_box.setSizePolicy(QSizePolicy.Expanding,
+                               QSizePolicy.Fixed)
+        time_box.setTitle("Время")
 
         grid_manage = QGridLayout(time_box)
 
@@ -164,8 +143,6 @@ class DemoWindow(QMainWindow):
         time_stop_label = QLabel("Конечная точка", time_box)
         self.time_start_spinbox = QDoubleSpinBox(time_box)
         self.time_stop_spinbox = QDoubleSpinBox(time_box)
-        #self.plot_button = QPushButton("Построить", time_box)
-        self.exit_button = QPushButton("Выход", time_box)
 
         #Configure spinboxes
         self.time_start_spinbox.setRange(0.00, 1000)
@@ -177,15 +154,39 @@ class DemoWindow(QMainWindow):
         grid_manage.addWidget(time_stop_label, 0, 1)
         grid_manage.addWidget(self.time_start_spinbox, 1, 0)
         grid_manage.addWidget(self.time_stop_spinbox, 1, 1)
-        #grid_manage.addWidget(self.plot_button, 1, 2)
-        grid_manage.addWidget(self.exit_button, 1, 3)
-
 
         time_box.setLayout(grid_manage)
         simple_layout.addWidget(time_box)
         time_changed_widget.setLayout(simple_layout)
 
         return time_changed_widget
+
+    def create_button_panel(self):
+        button_widget = QWidget(self.main_widget)
+        simple_layout = QHBoxLayout()
+
+        button_box = QGroupBox(button_widget)
+        button_box.setMinimumSize(120, 100)
+        button_box.setMaximumSize(120, 100)
+        button_box.setTitle("Управление")
+
+        box_layout = QVBoxLayout(button_widget)
+
+        # Create buttons
+        self.plot_button = QPushButton("Построить", button_box)
+        self.exit_button = QPushButton("Выход", button_box)
+
+        # Add to layout
+        box_layout.addWidget(self.plot_button)
+        box_layout.addWidget(self.exit_button)
+        button_box.setLayout(box_layout)
+
+        # Place main layout
+        simple_layout.addWidget(button_box)
+        button_widget.setLayout(simple_layout)
+
+        return button_widget
+
 
     def about(self):
         QMessageBox.about(self, "About",

@@ -13,11 +13,12 @@ from PyQt5.QtWidgets import QMainWindow, QGridLayout, QSizePolicy, \
 from PyQt5.QtCore import Qt
 from ExtUI import MyLabel, PlotCanvas, SetupWindow
 
+MAX_PIXEL_SIZE = 16777215
+
 #Класс главного окна
 class DemoWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.max_pixel_size = 16777215
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowTitle("Демонстрационная программа")
         self.create_ui()
@@ -29,17 +30,17 @@ class DemoWindow(QMainWindow):
         #Create and configure packer
         self.main_grid = QGridLayout(self.main_widget)
 
-        left_panel = self.create_left_panel()
-        self.main_grid.addWidget(left_panel, 0, 0, 2, 1)
+        self.left_panel = LeftPanel(self.main_widget)
+        self.main_grid.addWidget(self.left_panel, 0, 0, 2, 1)
 
-        up_plot_place = self.create_plot_place()
-        self.main_grid.addWidget(up_plot_place, 0, 1, 1, 2)
+        self.plot_panel = PlotPanel(self.main_widget)
+        self.main_grid.addWidget(self.plot_panel, 0, 1, 1, 2)
 
-        time_panel = self.create_time_panel()
-        self.main_grid.addWidget(time_panel, 1, 1)
+        self.time_panel = TimePanel(self.main_widget)
+        self.main_grid.addWidget(self.time_panel, 1, 1)
 
-        button_panel = self.create_button_panel()
-        self.main_grid.addWidget(button_panel, 1, 2)
+        self.button_panel = ButtonPanel(self.main_widget)
+        self.main_grid.addWidget(self.button_panel, 1, 2)
 
         self.main_widget.setLayout(self.main_grid)
 
@@ -50,18 +51,31 @@ class DemoWindow(QMainWindow):
         self.main_widget.setGeometry(200, 200, 800, 640)
         self.setCentralWidget(self.main_widget)
 
-    def create_left_panel(self):
+
+    def about(self):
+        QMessageBox.about(self, "About",
+                                    """embedding_in_qt5.py demonstartion
+Copyright 2020 Ivan Fomin, 2020 Grigory Galchenkov
+
+This program is a demonstration of excite signal in receiver.
+
+It may be used and modified with no restriction; raw copies as well as
+modified versions may be distributed without limitation."""
+                                )
+
+class LeftPanel(QWidget):
+    def __init__(self, parent = None):
+        QWidget.__init__(self, parent)
         #Create main widget and layout
-        left_widget = QWidget(self.main_widget)
         vertical_layout = QVBoxLayout()
 
         #Create groupboxes
-        exciter_box = QGroupBox(left_widget)
-        amplifier_box = QGroupBox(left_widget)
+        exciter_box = QGroupBox(self)
+        amplifier_box = QGroupBox(self)
 
         #Configure geometry
         exciter_box.setMinimumSize(250, 345)
-        exciter_box.setMaximumSize(250, self.max_pixel_size)
+        exciter_box.setMaximumSize(250, MAX_PIXEL_SIZE)
         amplifier_box.setMinimumSize(250, 100)
         amplifier_box.setMaximumSize(250, 100)
 
@@ -113,24 +127,25 @@ class DemoWindow(QMainWindow):
 
         vertical_layout.addWidget(exciter_box)
         vertical_layout.addWidget(amplifier_box)
-        left_widget.setLayout(vertical_layout)
-        return left_widget
+        self.setLayout(vertical_layout)
 
-    def create_plot_place(self):
-        plot_widget = QWidget(self.main_widget)
+
+class PlotPanel(QWidget):
+    def __init__(self, parent = None):
+        QWidget.__init__(self, parent)
         vertical_layout = QVBoxLayout()
 
-        self.plot = PlotCanvas(plot_widget)
+        self.plot = PlotCanvas(self)
         vertical_layout.addWidget(self.plot)
 
-        plot_widget.setLayout(vertical_layout)
-        return plot_widget
+        self.setLayout(vertical_layout)
 
-    def create_time_panel(self):
-        time_changed_widget = QWidget(self.main_widget)
+class TimePanel(QWidget):
+    def __init__(self, parent = None):
+        QWidget.__init__(self, parent)
         simple_layout = QHBoxLayout()
 
-        time_box = QGroupBox(time_changed_widget)
+        time_box = QGroupBox(self)
         time_box.setMinimumSize(320, 100)
         time_box.setSizePolicy(QSizePolicy.Expanding,
                                QSizePolicy.Fixed)
@@ -157,20 +172,19 @@ class DemoWindow(QMainWindow):
 
         time_box.setLayout(grid_manage)
         simple_layout.addWidget(time_box)
-        time_changed_widget.setLayout(simple_layout)
+        self.setLayout(simple_layout)
 
-        return time_changed_widget
+class ButtonPanel(QWidget):
+    def __init__(self, parent = None):
+        QWidget.__init__(self, parent)
+        self.setGeometry(0, 0, 120, 100)
+        self.setSizePolicy(QSizePolicy.Fixed,
+                           QSizePolicy.Fixed)
 
-    def create_button_panel(self):
-        button_widget = QWidget(self.main_widget)
         simple_layout = QHBoxLayout()
-
-        button_box = QGroupBox(button_widget)
-        button_box.setMinimumSize(120, 100)
-        button_box.setMaximumSize(120, 100)
+        button_box = QGroupBox(self)
         button_box.setTitle("Управление")
-
-        box_layout = QVBoxLayout(button_widget)
+        box_layout = QVBoxLayout(button_box)
 
         # Create buttons
         self.plot_button = QPushButton("Построить", button_box)
@@ -183,18 +197,4 @@ class DemoWindow(QMainWindow):
 
         # Place main layout
         simple_layout.addWidget(button_box)
-        button_widget.setLayout(simple_layout)
-
-        return button_widget
-
-
-    def about(self):
-        QMessageBox.about(self, "About",
-                                    """embedding_in_qt5.py demonstartion
-Copyright 2020 Ivan Fomin, 2020 Grigory Galchenkov
-
-This program is a demonstration of excite signal in receiver.
-
-It may be used and modified with no restriction; raw copies as well as
-modified versions may be distributed without limitation."""
-                                )
+        self.setLayout(simple_layout)

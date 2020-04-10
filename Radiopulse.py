@@ -4,7 +4,7 @@ class Radiopulse():
 	#Конструктор объекта
 	def __init__(self, length = 2.0, period_pulse = 4.0, number = 10,\
 				 period_packet = 100, frequency = 2, start_time = 0.1,\
-				 step_time = 0.01, end_time = 99.0, amplify = 1):
+				 step_time = 0.001, end_time = 99.0, amplify = 1):
             self.__length = length
             self.__period_pulse = period_pulse
             self.__number = number
@@ -12,7 +12,7 @@ class Radiopulse():
             self.__frequency = frequency
             self.__amplify = amplify
             self.__start_time  = start_time
-            self.__step_time = start_time
+            self.__step_time = step_time
             self.__end_time  = end_time
             self.gen_signal()
 

@@ -11,9 +11,9 @@ import UI                             #User interface classes
 
 from PyQt5.QtWidgets import QApplication
 from Radiopulse import *
-from ExciterObj import *                #TODO(Григорий): Make refactoring
+from ExciterObj import SignalCl                #TODO(Григорий): Make refactoring
 
-type_of_signal = "test"
+type_of_signal = "LNF"
 
 def close(): #Закрыть
 
@@ -28,10 +28,8 @@ def plotb(): #Построить
         ui.up_plot.draw_plot(radio.xpoints, radio.Ipoints)
         ui.down_plot.draw_plot(radio.xpoints, radio.Zpoints)
     else:
-        n = SignalObj(type_of_signal) #Заполнение массивов времени и значения сигнала
-        KU = ui.ku_spinbox.value()
-        n.UM(KU) #Умножение значений на коэффициент усиления
-        ui.plot.draw_plot(Time, Sign) #Построение графика
+        Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
+        ui.plot.draw_plot(Time, Value)
 
 def NLNF(): #НЛЧМ
 
@@ -54,6 +52,7 @@ def redraw_plot_start():
     if (stop < start):
         ui.time_stop_spinbox.setValue(ui.time_start_spinbox.value() + 1)
     radio.time_configure(start_time = start, end_time = stop)
+    radio_mod.Configure(Start = start, Stop = stop)
     plotb()
 
 
@@ -64,6 +63,7 @@ def redraw_plot_stop():
     if (stop < start):
         ui.time_start_spinbox.setValue(ui.time_stop_spinbox.value() - 1)
     radio.time_configure(start_time = start, end_time = stop)
+    radio_mod.Configure(Start = start,Stop = stop)
     plotb()
 
 
@@ -92,6 +92,7 @@ ui.time_stop_spinbox.valueChanged.connect(redraw_plot_stop)
 ui.time_start_spinbox.valueChanged.connect(redraw_plot_start)
 
 radio = Radiopulse(amplify = ui.ku_spinbox.value())
+radio_mod = SignalCl() 
 """ Конец реализации конструктора """
 
 ui.show()

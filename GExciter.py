@@ -20,7 +20,7 @@ def close(): #Закрыть
     sys.exit(app.exec_())
 
 def plotb(): #Построить
-
+    
     """Вставка функции для реализации пачки радиоимпульсов"""
 
     if ui.radio_radiobutton.isChecked():

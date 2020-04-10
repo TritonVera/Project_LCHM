@@ -137,7 +137,7 @@ class DemoWindow(QMainWindow):
         time_box.setTitle("Время")
 
         grid_manage = QGridLayout(time_box)
-
+ 
         #Create box elements
         time_start_label = QLabel("Начальная точка", time_box)
         time_stop_label = QLabel("Конечная точка", time_box)

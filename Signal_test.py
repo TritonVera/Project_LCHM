@@ -9,7 +9,7 @@ from ExciterObj import SignalCl
 
 Radio = SignalCl()
 Radio.Configure(Start = 0,Stop = 300)
-Time, Value, Value_I, Value_Q = Radio.Gen_Signal(2,'LNF')
+Time, Value, Value_I, Value_Q = Radio.Gen_Signal(2,'NLNF')
 
 fig,(ax1,ax2) = pyplot.subplots(2,1,figsize = (10,10))
 ax1.plot(Time,Value)

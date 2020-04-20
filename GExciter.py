@@ -11,9 +11,13 @@ import UI                             #User interface classes
 
 from PyQt5.QtWidgets import QApplication
 from Radiopulse import *
-from ExciterObj import SignalCl                #TODO(Григорий): Make refactoring
+from ExciterObj import SignalCl
 
 type_of_signal = "LNF"
+Time = 0
+Value = 0
+Value_I = 0
+Value_Q = 0
 
 def close(): #Закрыть
 
@@ -22,6 +26,7 @@ def close(): #Закрыть
 def plotb(): #Построить
     
     """Вставка функции для реализации пачки радиоимпульсов"""
+    global Time, Value, Value_I, Value_Q
 
     if ui.radio_radiobutton.isChecked():
         #radio.send_test()
@@ -31,17 +36,23 @@ def plotb(): #Построить
         ui.plot.draw_plot(Time, Value_I, Value_Q, Value)
 
 def NLNF(): #НЛЧМ
+    
+    global Time, Value, Value_I, Value_Q
 
     if ui.nlchm_radiobutton.isChecked() == True:
         global type_of_signal
         type_of_signal = "NLNF"
+        Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
     plotb()
 
 def LNF(): #ЛЧМ
+    
+    global Time, Value, Value_I, Value_Q
 
     if ui.lchm_radiobutton.isChecked() == True:
         global type_of_signal
         type_of_signal = "LNF"
+        Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
     plotb()
 
 def redraw_plot_start():
@@ -84,7 +95,7 @@ ui.radio_radiobutton.toggled.connect(plotb)
 ui.lchm_radiobutton.toggled.connect(LNF)
 ui.nlchm_radiobutton.toggled.connect(NLNF)
 ui.exit_button.clicked.connect(close)
-ui.plot_button.clicked.connect(plotb)
+#ui.plot_button.clicked.connect(plotb)
 
 #Привязка изменения значения в спинбоксах
 ui.ku_spinbox.valueChanged.connect(redraw_plot_amplify)

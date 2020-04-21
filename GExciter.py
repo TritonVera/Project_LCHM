@@ -14,10 +14,6 @@ from Radiopulse import *
 from ExciterObj import SignalCl
 
 type_of_signal = "LNF"
-Time = 0
-Value = 0
-Value_I = 0
-Value_Q = 0
 
 def close(): #Закрыть
 
@@ -42,7 +38,6 @@ def NLNF(): #НЛЧМ
     if ui.nlchm_radiobutton.isChecked() == True:
         global type_of_signal
         type_of_signal = "NLNF"
-        Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
     plotb()
 
 def LNF(): #ЛЧМ
@@ -52,7 +47,6 @@ def LNF(): #ЛЧМ
     if ui.lchm_radiobutton.isChecked() == True:
         global type_of_signal
         type_of_signal = "LNF"
-        Time, Value, Value_I, Value_Q = radio_mod.Gen_Signal(ui.ku_spinbox.value(), type_of_signal)
     plotb()
 
 def redraw_plot_start():

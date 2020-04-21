@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Sat Feb 29 15:10:12 2020
 
@@ -79,7 +79,7 @@ class DemoWindow(QMainWindow):
         self.radio_radiobutton = QRadioButton("Пачка РИ", exciter_box)
 
         #Configure radiobuttons
-        self.radio_radiobutton.setChecked(1)
+#        self.radio_radiobutton.setChecked(1)
         #self.lchm_radiobutton.setDisabled(1)
         #self.nlchm_radiobutton.setDisabled(1)
 
@@ -138,7 +138,8 @@ class DemoWindow(QMainWindow):
 
         grid_manage = QGridLayout(time_box)
 
-         #Create box elements
+        #Create box elements
+
         time_start_label = QLabel("Начальная точка", time_box)
         time_stop_label = QLabel("Конечная точка", time_box)
         self.time_start_spinbox = QDoubleSpinBox(time_box)
@@ -173,11 +174,11 @@ class DemoWindow(QMainWindow):
         box_layout = QVBoxLayout(button_widget)
 
         # Create buttons
-        self.plot_button = QPushButton("Построить", button_box)
+#        self.plot_button = QPushButton("Построить", button_box)
         self.exit_button = QPushButton("Выход", button_box)
 
         # Add to layout
-        box_layout.addWidget(self.plot_button)
+#        box_layout.addWidget(self.plot_button)
         box_layout.addWidget(self.exit_button)
         button_box.setLayout(box_layout)
 

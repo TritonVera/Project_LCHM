@@ -5,13 +5,13 @@ Created on Sat Feb 29 15:10:12 2020
 @author: Григорий
 @author: Ivan
 """
-
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QSizePolicy, \
                             QMessageBox, QWidget, QGroupBox, QRadioButton, \
                             QVBoxLayout, QLabel, QHBoxLayout, QPushButton, \
                             QDoubleSpinBox
 from PyQt5.QtCore import Qt
-from ExtUI import MyLabel, PlotCanvas, SetupWindow
+from ExtUI import PlotPanel
+import Radiopulse
 
 MAX_PIXEL_SIZE = 16777215
 
@@ -30,17 +30,20 @@ class DemoWindow(QMainWindow):
         #Create and configure packer
         self.main_grid = QGridLayout(self.main_widget)
 
-        self.left_panel = LeftPanel(self.main_widget)
-        self.main_grid.addWidget(self.left_panel, 0, 0, 2, 1)
+        self.choose_panel = ChoosePanel(self.main_widget)
+        self.main_grid.addWidget(self.choose_panel, 0, 0)
+
+        self.setup_panel = SetupPanel(self.main_widget)
+        self.main_grid.addWidget(self.setup_panel, 1, 0, -1, 1)
 
         self.plot_panel = PlotPanel(self.main_widget)
-        self.main_grid.addWidget(self.plot_panel, 0, 1, 1, 2)
+        self.main_grid.addWidget(self.plot_panel, 0, 1, 2, -1)
 
         self.time_panel = TimePanel(self.main_widget)
-        self.main_grid.addWidget(self.time_panel, 1, 1)
+        self.main_grid.addWidget(self.time_panel, 3, 1)
 
         self.button_panel = ButtonPanel(self.main_widget)
-        self.main_grid.addWidget(self.button_panel, 1, 2)
+        self.main_grid.addWidget(self.button_panel, 3, 2)
 
         self.main_widget.setLayout(self.main_grid)
 
@@ -48,7 +51,7 @@ class DemoWindow(QMainWindow):
     def create_main_widget(self):
         self.main_widget = QWidget()
         self.main_widget.setMinimumSize(800, 640)
-        self.main_widget.setGeometry(200, 200, 800, 640)
+        self.main_widget.setGeometry(0, 0, 800, 640)
         self.setCentralWidget(self.main_widget)
 
 
@@ -63,29 +66,22 @@ It may be used and modified with no restriction; raw copies as well as
 modified versions may be distributed without limitation."""
                                 )
 
-class LeftPanel(QWidget):
+class ChoosePanel(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
+        QWidget.setFixedSize(self, 300, 120)
+
         #Create main widget and layout
         vertical_layout = QVBoxLayout()
 
         #Create groupboxes
         exciter_box = QGroupBox(self)
-        amplifier_box = QGroupBox(self)
-
-        #Configure geometry
-        exciter_box.setMinimumSize(250, 345)
-        exciter_box.setMaximumSize(250, MAX_PIXEL_SIZE)
-        amplifier_box.setMinimumSize(250, 100)
-        amplifier_box.setMaximumSize(250, 100)
-
-        #Configure panel
+        exciter_box.setMinimumSize(300, 120)
+        exciter_box.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         exciter_box.setTitle("Возбудитель")
-        amplifier_box.setTitle("Усилитель мощности")
 
         #Make main layout packer
         inner_grid_layout = QGridLayout(exciter_box)
-        inner_horizontal_layout = QHBoxLayout(amplifier_box)
         
         #Create radiobuttons
         self.lchm_radiobutton = QRadioButton("ЛЧМ", exciter_box)
@@ -93,52 +89,79 @@ class LeftPanel(QWidget):
         self.radio_radiobutton = QRadioButton("Пачка РИ", exciter_box)
 
         #Configure radiobuttons
-        self.radio_radiobutton.setChecked(1)
-        #self.lchm_radiobutton.setDisabled(1)
-        #self.nlchm_radiobutton.setDisabled(1)
-
-        #Create label
-        ku_label = QLabel("Коэф. усиления:", amplifier_box)
-        # setup_radio_label = MyLabel("Настроить", exciter_box, self.main_widget)
-        # setup_radio_label.setAlignment(Qt.AlignRight)
-
-        #Create spinbox
-        self.ku_spinbox = QDoubleSpinBox(amplifier_box)
-
-        #Configure spinbox
-        self.ku_spinbox.setRange(0.1, 100)
-        self.ku_spinbox.setSuffix(" раз")
-        self.ku_spinbox.setValue(1)
-        self.ku_spinbox.setSingleStep(0.1)
+        self.lchm_radiobutton.setChecked(1)
 
         #Pack radiobuttons
         inner_grid_layout.addWidget(self.lchm_radiobutton, 0, 0)
         inner_grid_layout.addWidget(self.nlchm_radiobutton, 1, 0)
         inner_grid_layout.addWidget(self.radio_radiobutton, 2, 0)
-        # inner_grid_layout.addWidget(setup_radio_label, 2, 1)
-
-        #Pack label
-        inner_horizontal_layout.addWidget(ku_label)
-        inner_horizontal_layout.addWidget(self.ku_spinbox)
 
         #Ending packers
         exciter_box.setLayout(inner_grid_layout)
-        amplifier_box.setLayout(inner_horizontal_layout)
 
         vertical_layout.addWidget(exciter_box)
-        vertical_layout.addWidget(amplifier_box)
         self.setLayout(vertical_layout)
 
 
-class PlotPanel(QWidget):
+class SetupPanel(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
+
+        #Create main widget and layout
         vertical_layout = QVBoxLayout()
 
-        self.plot = PlotCanvas(self)
-        vertical_layout.addWidget(self.plot)
+        #Create groupboxes
+        setup_box = QGroupBox(self)
+        setup_box.setMinimumSize(300, 100)
+        setup_box.setGeometry(0, 0, 300, 100)
+        setup_box.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        setup_box.setTitle("Параметры сигнала")
 
+        #Make main layout packer
+        inner_grid_layout = QGridLayout(setup_box)
+        
+        # Create elements
+        ku_label = QLabel("Коэф. усиления:", setup_box)
+        self.ku_spinbox = QDoubleSpinBox(setup_box)
+        f_label = QLabel("Частота:", setup_box)
+        self.f_spinbox = QDoubleSpinBox(setup_box)
+        time_label = QLabel("Длительность пачки (мкс):", setup_box)
+        self.time_spinbox = QDoubleSpinBox(setup_box)
+        period_label = QLabel("Период импульсов (мкс):", setup_box)
+        self.period_spinbox = QDoubleSpinBox(setup_box)
+
+        # Configure spinboxes
+        self.ku_spinbox.setValue(1)
+        self.ku_spinbox.setRange(0.1, 100)
+        self.ku_spinbox.setSingleStep(0.1)
+
+        self.f_spinbox.setSuffix(" МГц")
+        self.f_spinbox.setValue(2)
+        self.f_spinbox.setRange(0.1, 100)
+        self.f_spinbox.setSingleStep(0.1)
+
+        self.time_spinbox.setValue(100)
+        self.time_spinbox.setRange(0.1, 1000)
+
+        self.period_spinbox.setValue(4)
+        self.period_spinbox.setRange(0.01, 100)
+
+        # Pack elements
+        inner_grid_layout.addWidget(ku_label, 0, 0)
+        inner_grid_layout.addWidget(self.ku_spinbox, 0, 1)
+        inner_grid_layout.addWidget(f_label, 1, 0)
+        inner_grid_layout.addWidget(self.f_spinbox, 1, 1)
+        inner_grid_layout.addWidget(time_label, 2, 0)
+        inner_grid_layout.addWidget(self.time_spinbox, 2, 1)
+        inner_grid_layout.addWidget(period_label, 3, 0)
+        inner_grid_layout.addWidget(self.period_spinbox, 3, 1)
+
+        #Ending packers
+        setup_box.setLayout(inner_grid_layout)
+
+        vertical_layout.addWidget(setup_box)
         self.setLayout(vertical_layout)
+
 
 class TimePanel(QWidget):
     def __init__(self, parent = None):
@@ -146,7 +169,7 @@ class TimePanel(QWidget):
         simple_layout = QHBoxLayout()
 
         time_box = QGroupBox(self)
-        time_box.setMinimumSize(320, 100)
+        time_box.setMinimumSize(320, 135)
         time_box.setSizePolicy(QSizePolicy.Expanding,
                                QSizePolicy.Fixed)
         time_box.setTitle("Время")
@@ -158,17 +181,20 @@ class TimePanel(QWidget):
         time_stop_label = QLabel("Конечная точка", time_box)
         self.time_start_spinbox = QDoubleSpinBox(time_box)
         self.time_stop_spinbox = QDoubleSpinBox(time_box)
+        self.auto_button = QPushButton("Запуск", time_box)
 
-        #Configure spinboxes
+        #Configure elements
         self.time_start_spinbox.setRange(0.00, 1000)
         self.time_stop_spinbox.setRange(0.1, 1000.1)
         self.time_stop_spinbox.setValue(100.0)
+        # self.auto_button.setCheckable(1)
 
         #Add elememts to grid packer
         grid_manage.addWidget(time_start_label, 0, 0)
         grid_manage.addWidget(time_stop_label, 0, 1)
         grid_manage.addWidget(self.time_start_spinbox, 1, 0)
         grid_manage.addWidget(self.time_stop_spinbox, 1, 1)
+        grid_manage.addWidget(self.auto_button, 2, 0, 1, 2)
 
         time_box.setLayout(grid_manage)
         simple_layout.addWidget(time_box)
@@ -177,7 +203,7 @@ class TimePanel(QWidget):
 class ButtonPanel(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
-        self.setGeometry(0, 0, 120, 100)
+        self.setMinimumSize(120, 150)
         self.setSizePolicy(QSizePolicy.Fixed,
                            QSizePolicy.Fixed)
 

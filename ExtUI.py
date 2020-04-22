@@ -13,15 +13,13 @@ class PlotPanel(QWidget):
         QWidget.__init__(self, parent)
         vertical_layout = QVBoxLayout()
 
-        self.plot_up = QwtPlot(self)
-        self.plot_down = QwtPlot(self)
+        self.plot = QwtPlot(self)
         self.line_i = QwtPlotCurve()
         self.line_q = QwtPlotCurve()
         self.line_z = QwtPlotCurve()
         self.draw_plot()
 
-        vertical_layout.addWidget(self.plot_up)
-        vertical_layout.addWidget(self.plot_down)
+        vertical_layout.addWidget(self.plot)
 
         self.setLayout(vertical_layout)
 
@@ -46,19 +44,17 @@ class PlotPanel(QWidget):
 
         self.line_i.setData(x_list, i_list)
         self.line_i.setPen(i_pen)
-        self.line_i.attach(self.plot_down)
+        self.line_i.attach(self.plot)
 
         self.line_q.setData(x_list, q_list)
         self.line_q.setPen(q_pen)
-        self.line_q.attach(self.plot_down)
+        self.line_q.attach(self.plot)
 
         self.line_z.setData(x_list, z_list)
         self.line_z.setPen(z_pen)
-        self.line_z.attach(self.plot_down)
-        self.plot_down.replot()
-        self.plot_down.show()
-        self.plot_up.replot()
-        self.plot_up.show()
+        self.line_z.attach(self.plot)
+        self.plot.replot()
+        self.plot.show()
 
 
 # class SetupWindow(QGroupBox):

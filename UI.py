@@ -41,10 +41,10 @@ class DemoWindow(QMainWindow):
         self.main_grid.addWidget(self.plot_panel, 0, 1, 2, -1)
 
         self.time_panel = TimePanel(self.main_widget)
-        self.main_grid.addWidget(self.time_panel, 3, 1)
+        self.main_grid.addWidget(self.time_panel, 2, 1)
 
         self.button_panel = ButtonPanel(self.main_widget)
-        self.main_grid.addWidget(self.button_panel, 3, 2)
+        self.main_grid.addWidget(self.button_panel, 2, 2)
 
         self.main_widget.setLayout(self.main_grid)
 

@@ -98,7 +98,7 @@ class Radiopulse():
 
     #Функция гармонического сигнала
     def garmonic(self, tm, freq, amp = 1.0, phs = 0.0):
-        signal = amp * math.sin((2 * math.pi * freq * tm) + phs)
+        signal = amp * math.cos((2 * math.pi * freq * tm) + phs)
         return signal
 
     def send_test(self):

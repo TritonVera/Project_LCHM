@@ -96,7 +96,6 @@ class ChoosePanel(QWidget):
 
         #Ending packers
         exciter_box.setLayout(inner_grid_layout)
-
         vertical_layout.addWidget(exciter_box)
         self.setLayout(vertical_layout)
 

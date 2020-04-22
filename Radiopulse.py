@@ -9,10 +9,11 @@ class Radiopulse():
             self.__number = 10
             self.__period_packet = 100
             self.__frequency = 2
-            self.__amplify = 1
+            self.__amplify_i = 1
+            self.__amplify_q = 1
             self.__start_time  = 0
             self.__step_time = 1.0 / (self.__frequency * 36)
-            self.__end_time  = 100
+            self.__end_time  = 20
 
             # Создание дискретов времени
             self.xpoints = self.arange(start = self.__start_time, stop = self.__end_time)
@@ -28,7 +29,7 @@ class Radiopulse():
     #Конфигуратор сигнала
     def configure(self, length = None, period_pulse = None,
                   number = None, period_packet = None,
-                  frequency = None, amplify = None):
+                  frequency = None, amplify_i = None, amplify_q = None):
         if (length != None):
             self.__length = length
         if (period_pulse != None):
@@ -39,8 +40,19 @@ class Radiopulse():
             self.__period_packet = period_packet
         if (frequency != None):
             self.__frequency = frequency
-        if (amplify != None):
-            self.__amplify = amplify
+            self.__step_time = 1.0 / (self.__frequency * 36)
+        if (amplify_i != None):
+            self.__amplify_i = amplify_i
+        if (amplify_q != None):
+            self.__amplify_q = amplify_q
+
+        # Переинициализация точек
+        self.Ipoints = []
+        self.Qpoints = []
+        self.Zpoints = []
+
+        for i in self.xpoints:
+            self.gen_signal(i)
 
     #Конфигуратор времени
     def time_configure(self, start_time = None, end_time = None):
@@ -79,10 +91,10 @@ class Radiopulse():
                 self.Zpoints.append(0)
             else:
                 self.Ipoints.append(self.garmonic(in_time_c, self.__frequency,
-                                    self.__amplify))
+                                    self.__amplify_i))
                 self.Qpoints.append(self.garmonic(in_time_c, self.__frequency,
-                                    self.__amplify, phs = math.pi/2))
-                self.Zpoints.append(self.Ipoints[-1] - self.Qpoints[-1])
+                                    self.__amplify_q, phs = math.pi/2))
+                self.Zpoints.append(self.Ipoints[-1] + self.Qpoints[-1])
 
     #Функция гармонического сигнала
     def garmonic(self, tm, freq, amp = 1.0, phs = 0.0):
@@ -101,23 +113,34 @@ class Radiopulse():
             point += self.__step_time
         return rang
 
-    def auto(self, length = None, period_pulse = None,
-                  number = None, period_packet = None,
-                  frequency = None, amplify = None, speed = 10):
-        fps = 30
-        self.configure(length, period_pulse, number, period_packet, frequency, amplify)
-        print(self.arange(self.__end_time + self.__step_time, 
-                             self.__end_time + (speed/fps)))
+    def auto(self, fps, speed = 10):
         for i in self.arange(self.__end_time + self.__step_time, 
-                             self.__end_time + (speed/fps)):
+                              self.__end_time + (speed/fps)):
             self.gen_signal(i)
+            self.xpoints.append(i)
+            self.xpoints.pop(0)
             self.Ipoints.pop(0)
             self.Qpoints.pop(0)
             self.Zpoints.pop(0)
 
-        self.__start_time = self.__start_time + (speed/fps)
-        self.__end_time = self.__end_time + (speed/fps)
-        self.xpoints = self.arange(start = self.__start_time, stop = self.__end_time)
+        self.__start_time = self.xpoints[0]
+        self.__end_time = self.xpoints[-1]
 
-
+    def auto_configure(self, length = None, period_pulse = None,
+                       number = None, period_packet = None,
+                       frequency = None, amplify_i = None, amplify_q = None):
+        if (length != None):
+            self.__length = length
+        if (period_pulse != None):
+            self.__period_pulse = period_pulse
+        if (number != None):
+            self.__number = number
+        if (period_packet != None):
+            self.__period_packet = period_packet
+        if (frequency != None):
+            self.__frequency = frequency
+        if (amplify_i != None):
+            self.__amplify_i = amplify_i
+        if (amplify_q != None):
+            self.__amplify_q = amplify_q
 

@@ -27,7 +27,6 @@ class PlotPanel(QWidget):
 
     def draw_plot(self, x_points = [], i_points = [], q_points = [], z_points = []):
         x_list = np.asarray(x_points)
-        print("Hello")
 
         i_list = np.asarray(i_points)
         q_list = np.asarray(q_points)
@@ -37,18 +36,29 @@ class PlotPanel(QWidget):
         z_pen = QPen(z_color)
         z_pen.setWidth(2)
 
+        q_color = QColor(255, 0, 0)
+        q_pen = QPen(q_color)
+        q_pen.setWidth(2)
+
+        i_color = QColor(255, 0, 255)
+        i_pen = QPen(i_color)
+        i_pen.setWidth(2)
+
         self.line_i.setData(x_list, i_list)
+        self.line_i.setPen(i_pen)
+        self.line_i.attach(self.plot_down)
+
         self.line_q.setData(x_list, q_list)
-        self.line_i.attach(self.plot_up)
-        self.line_q.attach(self.plot_up)
-        self.plot_up.replot()
-        self.plot_up.show()
+        self.line_q.setPen(q_pen)
+        self.line_q.attach(self.plot_down)
 
         self.line_z.setData(x_list, z_list)
         self.line_z.setPen(z_pen)
         self.line_z.attach(self.plot_down)
         self.plot_down.replot()
         self.plot_down.show()
+        self.plot_up.replot()
+        self.plot_up.show()
 
 
 # class SetupWindow(QGroupBox):

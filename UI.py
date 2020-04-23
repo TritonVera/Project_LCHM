@@ -8,7 +8,7 @@ Created on Sat Feb 29 15:10:12 2020
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QSizePolicy, \
                             QMessageBox, QWidget, QGroupBox, QRadioButton, \
                             QVBoxLayout, QLabel, QHBoxLayout, QPushButton, \
-                            QDoubleSpinBox
+                            QDoubleSpinBox, QCheckBox
 from PyQt5.QtCore import Qt, QTimer
 from ExtUI import PlotPanel
 import Radiopulse
@@ -40,11 +40,14 @@ class DemoWindow(QMainWindow):
         self.plot_panel = PlotPanel(self.main_widget)
         self.main_grid.addWidget(self.plot_panel, 0, 1, 2, -1)
 
+        self.graph_panel = GraphPanel(self.main_widget)
+        self.main_grid.addWidget(self.graph_panel, 2, 1, 1, -1)
+
         self.time_panel = TimePanel(self.main_widget)
-        self.main_grid.addWidget(self.time_panel, 2, 1)
+        self.main_grid.addWidget(self.time_panel, 3, 1)
 
         self.button_panel = ButtonPanel(self.main_widget)
-        self.main_grid.addWidget(self.button_panel, 2, 2)
+        self.main_grid.addWidget(self.button_panel, 3, 2)
 
         self.main_widget.setLayout(self.main_grid)
 
@@ -118,7 +121,7 @@ class SetupPanel(QWidget):
         inner_grid_layout = QGridLayout(setup_box)
         
         # Create elements
-        self.ku_i_label = QLabel("Коэф. усиления:", setup_box)
+        self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
         self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
         self.ku_q_label = QLabel("Коэф. усиления Q:", setup_box)
@@ -173,9 +176,9 @@ class SetupPanel(QWidget):
         self.divide_button.setCheckable(1)
 
         # Pack elements
-        inner_grid_layout.addWidget(self.ku_i_label, 0, 0)
-        inner_grid_layout.addWidget(self.ku_i_spinbox, 0, 1)
-        inner_grid_layout.addWidget(self.divide_button, 1, 0, 1, -1)
+        inner_grid_layout.addWidget(self.ku_i_label, 1, 0)
+        inner_grid_layout.addWidget(self.ku_i_spinbox, 1, 1)
+        inner_grid_layout.addWidget(self.divide_button, 0, 0, 1, -1)
         inner_grid_layout.addWidget(self.ku_q_label, 2, 0)
         inner_grid_layout.addWidget(self.ku_q_spinbox, 2, 1)
         inner_grid_layout.addWidget(f_label, 3, 0)
@@ -195,6 +198,28 @@ class SetupPanel(QWidget):
         vertical_layout.addWidget(setup_box)
         self.setLayout(vertical_layout)
 
+
+class GraphPanel(QWidget):
+    def __init__(self, parent = None):
+        self.parent = parent
+        QWidget.__init__(self, self.parent)
+        QWidget.setMaximumHeight(self, 40)
+        simple_layout = QHBoxLayout()
+
+        self.I_box = QCheckBox("I составляющая", self)
+        self.Q_box = QCheckBox("Q составляющая", self)
+        self.Z_box = QCheckBox("Выходной сигнал", self)
+
+        self.I_box.setChecked(1)
+        self.Q_box.setChecked(1)
+        self.Z_box.setChecked(1)
+
+        simple_layout.addWidget(self.I_box)
+        simple_layout.addWidget(self.Q_box)
+        simple_layout.addWidget(self.Z_box)
+        simple_layout.setAlignment(Qt.AlignHCenter)
+
+        self.setLayout(simple_layout)
 
 class TimePanel(QWidget):
     def __init__(self, parent = None):

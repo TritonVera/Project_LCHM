@@ -129,6 +129,30 @@ def div_but():
         ui.setup_panel.ku_q_label.setVisible(1)
         ui.setup_panel.ku_q_spinbox.setVisible(1)
 
+def visible_i():
+    if ui.graph_panel.I_box.isChecked():
+        ui.plot_panel.i_flag = 1
+        plotb()
+    else:
+        ui.plot_panel.i_flag = 0
+        plotb()
+
+def visible_q():
+    if ui.graph_panel.Q_box.isChecked():
+        ui.plot_panel.q_flag = 1
+        plotb()
+    else:
+        ui.plot_panel.q_flag = 0
+        plotb()
+
+def visible_z():
+    if ui.graph_panel.Z_box.isChecked():
+        ui.plot_panel.z_flag = 1
+        plotb()
+    else:
+        ui.plot_panel.z_flag = 0
+        plotb()
+
 #Привязка кнопок
 ui.choose_panel.radio_radiobutton.toggled.connect(radio_push)
 ui.choose_panel.lchm_radiobutton.toggled.connect(LNF)
@@ -136,6 +160,9 @@ ui.choose_panel.nlchm_radiobutton.toggled.connect(LNF)
 ui.button_panel.exit_button.clicked.connect(close)
 ui.time_panel.auto_button.toggled.connect(auto_but)
 ui.setup_panel.divide_button.toggled.connect(div_but)
+ui.graph_panel.I_box.toggled.connect(visible_i)
+ui.graph_panel.Q_box.toggled.connect(visible_q)
+ui.graph_panel.Z_box.toggled.connect(visible_z)
 
 #Привязка изменения значения в спинбоксах
 ui.setup_panel.ku_i_spinbox.valueChanged.connect(redraw_plot)

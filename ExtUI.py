@@ -30,7 +30,7 @@ class PlotPanel(QWidget):
         q_list = np.asarray(q_points)
         z_list = np.asarray(z_points)
 
-        z_color = QColor(0, 255, 0)
+        z_color = QColor(0, 128, 128)
         z_pen = QPen(z_color)
         z_pen.setWidth(2)
 

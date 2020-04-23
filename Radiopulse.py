@@ -46,14 +46,6 @@ class Radiopulse():
         if (amplify_q != None):
             self.__amplify_q = amplify_q
 
-        # Переинициализация точек
-        self.Ipoints = []
-        self.Qpoints = []
-        self.Zpoints = []
-
-        for i in self.xpoints:
-            self.gen_signal(i)
-
     #Конфигуратор времени
     def time_configure(self, start_time = None, end_time = None):
         if (start_time != None):
@@ -76,16 +68,12 @@ class Radiopulse():
     #Функция генерирования массивов точек радиосигнала
     def gen_signal(self, in_time_c):
         #Алгоритм заполнения массивов
-        while in_time_c > self.__period_packet:
-            in_time_c = in_time_c - self.__period_packet
-        if in_time_c > (self.__number * self.__period_pulse):
+        if (in_time_c % self.__period_packet) > (self.__number * self.__period_pulse):
             self.Ipoints.append(0)
             self.Qpoints.append(0)
             self.Zpoints.append(0)
         else:
-            while in_time_c > self.__period_pulse:
-                in_time_c = in_time_c - self.__period_pulse
-            if in_time_c > self.__length:
+            if (in_time_c % self.__period_packet % self.__period_pulse) > self.__length:
                 self.Ipoints.append(0)
                 self.Qpoints.append(0)
                 self.Zpoints.append(0)
@@ -125,22 +113,3 @@ class Radiopulse():
 
         self.__start_time = self.xpoints[0]
         self.__end_time = self.xpoints[-1]
-
-    def auto_configure(self, length = None, period_pulse = None,
-                       number = None, period_packet = None,
-                       frequency = None, amplify_i = None, amplify_q = None):
-        if (length != None):
-            self.__length = length
-        if (period_pulse != None):
-            self.__period_pulse = period_pulse
-        if (number != None):
-            self.__number = number
-        if (period_packet != None):
-            self.__period_packet = period_packet
-        if (frequency != None):
-            self.__frequency = frequency
-        if (amplify_i != None):
-            self.__amplify_i = amplify_i
-        if (amplify_q != None):
-            self.__amplify_q = amplify_q
-

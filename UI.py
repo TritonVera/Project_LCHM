@@ -70,14 +70,14 @@ modified versions may be distributed without limitation."""
 class ChoosePanel(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
-        QWidget.setFixedSize(self, 300, 120)
+        QWidget.setFixedSize(self, 310, 120)
 
         #Create main widget and layout
         vertical_layout = QVBoxLayout()
 
         #Create groupboxes
         exciter_box = QGroupBox(self)
-        exciter_box.setMinimumSize(300, 120)
+        exciter_box.setMinimumSize(310, 120)
         exciter_box.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         exciter_box.setTitle("Возбудитель")
 
@@ -118,25 +118,29 @@ class SetupPanel(QWidget):
         inner_grid_layout = QGridLayout(setup_box)
         
         # Create elements
-        ku_i_label = QLabel("Коэф. усиления I:", setup_box)
+        self.ku_i_label = QLabel("Коэф. усиления:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
-        ku_q_label = QLabel("Коэф. усиления Q:", setup_box)
+        self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
+        self.ku_q_label = QLabel("Коэф. усиления Q:", setup_box)
         self.ku_q_spinbox = QDoubleSpinBox(setup_box)
         f_label = QLabel("Частота:", setup_box)
         self.f_spinbox = QDoubleSpinBox(setup_box)
-        time_label = QLabel("Длительность пачки (мкс):", setup_box)
+        self.time_label = QLabel("Период пачки:", setup_box)
         self.time_spinbox = QDoubleSpinBox(setup_box)
-        period_label = QLabel("Период импульсов (мкс):", setup_box)
+        self.period_label = QLabel("Период импульсов:", setup_box)
         self.period_spinbox = QDoubleSpinBox(setup_box)
+        self.number_label = QLabel("Число импульсов:", setup_box)
+        self.number_spinbox = QDoubleSpinBox(setup_box)
+        self.pulse_label = QLabel("Длительность импульса:", setup_box)
+        self.pulse_spinbox = QDoubleSpinBox(setup_box)
 
         # Configure spinboxes
         self.ku_i_spinbox.setValue(1)
-        self.ku_i_spinbox.setRange(0.1, 100)
+        self.ku_i_spinbox.setRange(0, 100)
         self.ku_i_spinbox.setSingleStep(0.1)
         self.ku_q_spinbox.setValue(1)
-        self.ku_q_spinbox.setRange(0.1, 100)
+        self.ku_q_spinbox.setRange(0, 100)
         self.ku_q_spinbox.setSingleStep(0.1)
-
 
         self.f_spinbox.setSuffix(" МГц")
         self.f_spinbox.setValue(2)
@@ -144,22 +148,46 @@ class SetupPanel(QWidget):
         self.f_spinbox.setSingleStep(0.1)
 
         self.time_spinbox.setValue(100)
-        self.time_spinbox.setRange(0.1, 1000)
+        self.time_spinbox.setSuffix(" мкс")
+        self.time_spinbox.setSingleStep(1)
+        self.time_spinbox.setRange(1, 1000)
+
+        self.number_spinbox.setValue(10)
+        self.number_spinbox.setSingleStep(1)
+        self.number_spinbox.setRange(1, 100)
 
         self.period_spinbox.setValue(4)
         self.period_spinbox.setRange(0.01, 100)
+        self.period_spinbox.setSuffix(" мкс")
+        self.period_spinbox.setSingleStep(0.1)
+
+        self.pulse_spinbox.setValue(2)
+        self.pulse_spinbox.setRange(0.01, 100)
+        self.pulse_spinbox.setSuffix(" мкс")
+        self.pulse_spinbox.setSingleStep(0.1)
+
+        self.time_spinbox.setVisible(0)
+        self.time_label.setVisible(0)
+        self.number_spinbox.setVisible(0)
+        self.number_label.setVisible(0)
+        self.divide_button.setCheckable(1)
 
         # Pack elements
-        inner_grid_layout.addWidget(ku_i_label, 0, 0)
+        inner_grid_layout.addWidget(self.ku_i_label, 0, 0)
         inner_grid_layout.addWidget(self.ku_i_spinbox, 0, 1)
-        inner_grid_layout.addWidget(ku_q_label, 1, 0)
-        inner_grid_layout.addWidget(self.ku_q_spinbox, 1, 1)
-        inner_grid_layout.addWidget(f_label, 2, 0)
-        inner_grid_layout.addWidget(self.f_spinbox, 2, 1)
-        inner_grid_layout.addWidget(time_label, 3, 0)
-        inner_grid_layout.addWidget(self.time_spinbox, 3, 1)
-        inner_grid_layout.addWidget(period_label, 4, 0)
-        inner_grid_layout.addWidget(self.period_spinbox, 4, 1)
+        inner_grid_layout.addWidget(self.divide_button, 1, 0, 1, -1)
+        inner_grid_layout.addWidget(self.ku_q_label, 2, 0)
+        inner_grid_layout.addWidget(self.ku_q_spinbox, 2, 1)
+        inner_grid_layout.addWidget(f_label, 3, 0)
+        inner_grid_layout.addWidget(self.f_spinbox, 3, 1)
+        inner_grid_layout.addWidget(self.time_label, 4, 0)
+        inner_grid_layout.addWidget(self.time_spinbox, 4, 1)
+        inner_grid_layout.addWidget(self.period_label, 5, 0)
+        inner_grid_layout.addWidget(self.period_spinbox, 5, 1)
+        inner_grid_layout.addWidget(self.number_label, 6, 0)
+        inner_grid_layout.addWidget(self.number_spinbox, 6, 1)
+        inner_grid_layout.addWidget(self.pulse_label, 7, 0)
+        inner_grid_layout.addWidget(self.pulse_spinbox, 7, 1)
 
         #Ending packers
         setup_box.setLayout(inner_grid_layout)
@@ -187,19 +215,30 @@ class TimePanel(QWidget):
         self.time_start_spinbox = QDoubleSpinBox(time_box)
         self.time_stop_spinbox = QDoubleSpinBox(time_box)
         self.auto_button = QPushButton("Запуск", time_box)
+        self.auto_spinbox = QDoubleSpinBox(time_box)
 
         #Configure elements
         self.time_start_spinbox.setRange(0.0, 1000000)
+        self.time_start_spinbox.setSingleStep(0.1)
+        self.time_start_spinbox.setSuffix(" мкс")
         self.time_stop_spinbox.setRange(0.1, 1000000.1)
+        self.time_stop_spinbox.setSingleStep(0.1)
+        self.time_stop_spinbox.setSuffix(" мкс")
         self.time_stop_spinbox.setValue(100.0)
         self.auto_button.setCheckable(1)
+        self.auto_spinbox.setRange(0.0, 1000)
+        self.auto_spinbox.setValue(10.0)
+        self.auto_spinbox.setSingleStep(1)
+        self.auto_spinbox.setEnabled(0)
+        self.auto_spinbox.setSuffix(" мкс/c")
 
         #Add elememts to grid packer
         grid_manage.addWidget(time_start_label, 0, 0)
         grid_manage.addWidget(time_stop_label, 0, 1)
         grid_manage.addWidget(self.time_start_spinbox, 1, 0)
         grid_manage.addWidget(self.time_stop_spinbox, 1, 1)
-        grid_manage.addWidget(self.auto_button, 2, 0, 1, 2)
+        grid_manage.addWidget(self.auto_button, 2, 0)
+        grid_manage.addWidget(self.auto_spinbox, 2, 1)
 
         time_box.setLayout(grid_manage)
         simple_layout.addWidget(time_box)

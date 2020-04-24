@@ -214,9 +214,13 @@ class GraphPanel(QWidget):
         self.Q_box.setChecked(1)
         self.Z_box.setChecked(1)
 
+        simple_layout.addStretch(1)
         simple_layout.addWidget(self.I_box)
+        simple_layout.addStretch(1)
         simple_layout.addWidget(self.Q_box)
+        simple_layout.addStretch(1)
         simple_layout.addWidget(self.Z_box)
+        simple_layout.addStretch(1)
         simple_layout.setAlignment(Qt.AlignHCenter)
 
         self.setLayout(simple_layout)
@@ -282,11 +286,9 @@ class ButtonPanel(QWidget):
         box_layout = QVBoxLayout(button_box)
 
         # Create buttons
-#        self.plot_button = QPushButton("Построить", button_box)
         self.exit_button = QPushButton("Выход", button_box)
 
         # Add to layout
-#        box_layout.addWidget(self.plot_button)
         box_layout.addWidget(self.exit_button)
         button_box.setLayout(box_layout)
 

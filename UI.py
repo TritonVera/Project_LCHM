@@ -147,7 +147,7 @@ class SetupPanel(QWidget):
 
         self.f_spinbox.setSuffix(" МГц")
         self.f_spinbox.setValue(2)
-        self.f_spinbox.setRange(0.1, 100)
+        self.f_spinbox.setRange(0.1, 10)
         self.f_spinbox.setSingleStep(0.1)
 
         self.time_spinbox.setValue(100)

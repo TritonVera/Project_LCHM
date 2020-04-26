@@ -12,7 +12,7 @@ class Radiopulse():
             self.__amplify_i = 1
             self.__amplify_q = 1
             self.__start_time  = 0
-            self.__step_time = 1.0 / (self.__frequency * 36)
+            self.__step_time = 1.0 / 360
             self.__end_time  = 20
 
             # Создание дискретов времени
@@ -40,7 +40,6 @@ class Radiopulse():
             self.__period_packet = period_packet
         if (frequency != None):
             self.__frequency = frequency
-            self.__step_time = 1.0 / (self.__frequency * 36)
         if (amplify_i != None):
             self.__amplify_i = amplify_i
         if (amplify_q != None):

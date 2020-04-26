@@ -74,13 +74,10 @@ class SignalCl:
         self.Amplify_Q = Amplify_Q
         
         self.Setup_par(F*10**6, Imp, T)
-#        print(f)
         
         return(0)
 
     def Gen_Signal(self, N, N_per_osc, Start):
-        
-        print("f = ", f)
         
         Time = [0]*N
         Signal = [0]*N
@@ -109,25 +106,28 @@ class SignalCl:
         one_computation_add_time = Speed*Mult/FPS
         add_dots = int(one_computation_add_time*(f+deltaF)*self.dots_per_osc)
         add_per_osc = self.dots_per_osc
+        
         if add_dots < 20:
             add_dots = 20
             add_per_osc = add_dots/(one_computation_add_time*(f+deltaF))
             
-        print("Speed = ",Speed)
-        print(add_dots)
         self.Par = self.Gen_Signal(add_dots,add_per_osc,self.Time[-1]*Mult)
-        print(self.Time[0]," ",self.Time[-1])
         
-        del self.Time[0:add_dots]
-        del self.Signal[0:add_dots]
-        del self.I[0:add_dots]
-        del self.Q[0:add_dots]
         self.Time.extend(self.Par[0])
         self.Signal.extend(self.Par[1])
         self.I.extend(self.Par[2])
         self.Q.extend(self.Par[3])
-        print(self.Time[0]," ",self.Time[-1])
-        print("")
+
+        
+        if self.Time[-1]-self.Time[0] > self.time:
+            compare = False
+            while compare != True:
+                del self.Time[0]
+                del self.Signal[0]
+                del self.I[0]
+                del self.Q[0]
+                if self.Time[-1]-self.Time[0] <= self.time:
+                    compare = True
         
         return(0)
 

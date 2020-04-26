@@ -43,6 +43,7 @@ def radio_push():
     ui.setup_panel.pulse_spinbox.setValue(4)
     plotb()
 
+
 def N_LNF(): #Н_ЛЧМ
 
     ui.time_panel.time_stop_spinbox.setValue(100)
@@ -52,18 +53,13 @@ def N_LNF(): #Н_ЛЧМ
     ui.setup_panel.number_spinbox.setVisible(0)
     ui.setup_panel.number_label.setVisible(0)
     
-#    ui.setup_panel.period_spinbox.setValue(100)
-#    ui.setup_panel.pulse_spinbox.setValue(25)
-#    ui.setup_panel.f_spinbox.setMinimum(0.05)
-#    ui.setup_panel.f_spinbox.setMaximum(1)
-    
     if ui.choose_panel.nlchm_radiobutton.isChecked():
         radio_mod.type_of_signal = "NLNF"
     elif ui.choose_panel.lchm_radiobutton.isChecked():
         radio_mod.type_of_signal = "LNF"
     
     ui.setup_panel.f_spinbox.setMaximum(1)
-    ui.setup_panel.f_spinbox.setMinimum(0)    
+    ui.setup_panel.f_spinbox.setMinimum(0.0001)    
     ui.setup_panel.pulse_spinbox.setMaximum(200)
     ui.setup_panel.pulse_spinbox.setMinimum(0.01)
     ui.setup_panel.period_spinbox.setMaximum(200)

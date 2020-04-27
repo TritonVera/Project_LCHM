@@ -69,7 +69,6 @@ def N_LNF(): #Н_ЛЧМ
     ui.time_panel.time_start_spinbox.setEnabled(1)
     ui.time_panel.time_start_spinbox.setValue(0)
     ui.time_panel.auto_button.setEnabled(1)
-    
 
     ui.setup_panel.f_spinbox.setRange(0.0001,1)
     ui.setup_panel.f_spinbox.setDecimals(4)

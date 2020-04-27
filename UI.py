@@ -73,15 +73,14 @@ modified versions may be distributed without limitation."""
 class ChoosePanel(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
-        QWidget.setFixedSize(self, 310, 120)
+        QWidget.setFixedSize(self, 300, 150)
+        QWidget.setSizePolicy(self, QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         #Create main widget and layout
         vertical_layout = QVBoxLayout()
 
         #Create groupboxes
         exciter_box = QGroupBox(self)
-        exciter_box.setMinimumSize(310, 120)
-        exciter_box.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         exciter_box.setTitle("Возбудитель")
 
         #Make main layout packer
@@ -112,8 +111,7 @@ class SetupPanel(QWidget):
 
         #Create groupboxes
         setup_box = QGroupBox(self)
-        setup_box.setMinimumSize(300, 100)
-        setup_box.setGeometry(0, 0, 300, 100)
+        setup_box.setMaximumSize(300, MAX_PIXEL_SIZE)
         setup_box.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
         setup_box.setTitle("Параметры сигнала")
 
@@ -231,7 +229,7 @@ class TimePanel(QWidget):
         simple_layout = QHBoxLayout()
 
         time_box = QGroupBox(self)
-        time_box.setMinimumSize(320, 135)
+        time_box.setMaximumSize(MAX_PIXEL_SIZE, 120)
         time_box.setSizePolicy(QSizePolicy.Expanding,
                                QSizePolicy.Fixed)
         time_box.setTitle("Время")
@@ -279,7 +277,7 @@ class TimePanel(QWidget):
 class ButtonPanel(QWidget):
     def __init__(self, parent = None):
         QWidget.__init__(self, parent)
-        self.setMinimumSize(120, 150)
+        self.setFixedSize(120, 120)
         self.setSizePolicy(QSizePolicy.Fixed,
                            QSizePolicy.Fixed)
 

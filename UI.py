@@ -159,13 +159,13 @@ class SetupPanel(QWidget):
         self.number_spinbox.setSingleStep(1)
         self.number_spinbox.setRange(1, 100)
 
-        self.period_spinbox.setValue(4)
-        self.period_spinbox.setRange(0.01, 100)
+        self.period_spinbox.setValue(10)
+        self.period_spinbox.setRange(0.01, 200)
         self.period_spinbox.setSuffix(" мкс")
         self.period_spinbox.setSingleStep(0.1)
 
         self.pulse_spinbox.setValue(2)
-        self.pulse_spinbox.setRange(0.01, 100)
+        self.pulse_spinbox.setRange(0.01, 200)
         self.pulse_spinbox.setSuffix(" мкс")
         self.pulse_spinbox.setSingleStep(0.1)
 

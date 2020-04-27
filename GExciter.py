@@ -23,56 +23,78 @@ def close(): #Закрыть
 
 
 def plotb(): #Построить
-    
-    """Вставка функции для реализации пачки радиоимпульсов"""
     global Time, Value, Value_I, Value_Q
-
     if ui.choose_panel.radio_radiobutton.isChecked():
         ui.plot_panel.draw_plot(radio.xpoints, radio.Ipoints, radio.Qpoints, radio.Zpoints)
-    else:
+    elif (ui.choose_panel.nlchm_radiobutton.isChecked() or
+          ui.choose_panel.lchm_radiobutton.isChecked()):
         ui.plot_panel.draw_plot(radio_mod.Time, radio_mod.I, radio_mod.Q, radio_mod.Signal)
 
 def radio_push():
-    ui.time_panel.time_stop_spinbox.setValue(20)
-    ui.time_panel.time_start_spinbox.setValue(0)
-    ui.setup_panel.time_spinbox.setVisible(1)
-    ui.setup_panel.time_label.setVisible(1)
-    ui.setup_panel.number_spinbox.setVisible(1)
-    ui.setup_panel.number_label.setVisible(1)
-    ui.setup_panel.f_spinbox.setValue(2)
-    ui.setup_panel.pulse_spinbox.setValue(4)
-    plotb()
+    if ui.choose_panel.radio_radiobutton.isChecked():
+        ui.time_panel.time_stop_spinbox.setValue(20)
+        ui.time_panel.time_stop_spinbox.setEnabled(1)
+        ui.time_panel.time_start_spinbox.setValue(0)
+        ui.time_panel.time_start_spinbox.setEnabled(1)
+        ui.time_panel.auto_button.setEnabled(1)
+
+        ui.setup_panel.time_spinbox.setVisible(1)
+        ui.setup_panel.time_label.setVisible(1)
+        ui.setup_panel.number_spinbox.setVisible(1)
+        ui.setup_panel.number_label.setVisible(1)
+
+        ui.setup_panel.f_spinbox.setRange(0.1, 10)
+        ui.setup_panel.f_spinbox.setDecimals(1)
+        ui.setup_panel.f_spinbox.setValue(2)
+        ui.setup_panel.f_spinbox.setSingleStep(0.1)
+
+        ui.setup_panel.period_spinbox.setRange(0.1, 200)
+        ui.setup_panel.period_spinbox.setValue(10)
+        ui.setup_panel.period_spinbox.setSingleStep(0.1)
+
+        ui.setup_panel.pulse_spinbox.setRange(0.01, 200)
+        ui.setup_panel.pulse_spinbox.setValue(2)
+        ui.setup_panel.pulse_spinbox.setSingleStep(0.1)
+        plotb()
 
 
 def N_LNF(): #Н_ЛЧМ
-
-    ui.time_panel.time_stop_spinbox.setValue(100)
-    ui.time_panel.time_start_spinbox.setValue(0)
     ui.setup_panel.time_spinbox.setVisible(0)
     ui.setup_panel.time_label.setVisible(0)
     ui.setup_panel.number_spinbox.setVisible(0)
     ui.setup_panel.number_label.setVisible(0)
+
+    ui.time_panel.time_stop_spinbox.setEnabled(1)
+    ui.time_panel.time_stop_spinbox.setValue(100)
+    ui.time_panel.time_start_spinbox.setEnabled(1)
+    ui.time_panel.time_start_spinbox.setValue(0)
+    ui.time_panel.auto_button.setEnabled(1)
     
+    ui.setup_panel.f_spinbox.setMaximum(1)
+    ui.setup_panel.f_spinbox.setMinimum(0.0001)
+    ui.setup_panel.f_spinbox.setDecimals(4)
+    ui.setup_panel.f_spinbox.setValue(0.1)
+    ui.setup_panel.f_spinbox.setSingleStep(0.0001)
+
+    ui.setup_panel.pulse_spinbox.setMaximum(200)
+    ui.setup_panel.pulse_spinbox.setMinimum(0.01)
+    ui.setup_panel.pulse_spinbox.setValue(100)
+
+    ui.setup_panel.period_spinbox.setMaximum(200)
+    ui.setup_panel.period_spinbox.setMinimum(0.01)
+    ui.setup_panel.period_spinbox.setSingleStep(0.01)
+    ui.setup_panel.period_spinbox.setValue(125)
+
+    radio_mod.Configure_values(F = ui.setup_panel.f_spinbox.value())
+
     if ui.choose_panel.nlchm_radiobutton.isChecked():
         radio_mod.type_of_signal = "NLNF"
     elif ui.choose_panel.lchm_radiobutton.isChecked():
         radio_mod.type_of_signal = "LNF"
-    
-    ui.setup_panel.f_spinbox.setMaximum(1)
-    ui.setup_panel.f_spinbox.setMinimum(0.0001)    
-    ui.setup_panel.pulse_spinbox.setMaximum(200)
-    ui.setup_panel.pulse_spinbox.setMinimum(0.01)
-    ui.setup_panel.period_spinbox.setMaximum(200)
-    ui.setup_panel.period_spinbox.setMinimum(0)
-    
-    ui.setup_panel.f_spinbox.setValue(0.1)
-    ui.setup_panel.pulse_spinbox.setValue(100)
-    ui.setup_panel.period_spinbox.setValue(125)
 
-    radio_mod.Configure_values(F = ui.setup_panel.f_spinbox.value())
     redraw_plot_time()
-
     
+
 def redraw_plot_time():
     ui.time_panel.time_start_spinbox.setMaximum(ui.time_panel.time_stop_spinbox.value() - 0.1)
     ui.time_panel.time_stop_spinbox.setMinimum(ui.time_panel.time_start_spinbox.value() + 0.1)
@@ -80,15 +102,13 @@ def redraw_plot_time():
         start = ui.time_panel.time_start_spinbox.value()
         stop = ui.time_panel.time_stop_spinbox.value()
         if (stop > start):
-            
-            radio.time_configure(start_time = start, end_time = stop)
-            if (ui.choose_panel.radio_radiobutton.isChecked() == 0):
+            if ui.choose_panel.radio_radiobutton.isChecked():
+                radio.time_configure(start_time = start, end_time = stop)
+            else:
                 radio_mod.Configure_time(Start = start, Stop = stop)
-            
             plotb()
 
 def redraw_plot():
-
     if (ui.setup_panel.divide_button.isChecked()):
         ui.setup_panel.ku_q_spinbox.setValue(ui.setup_panel.ku_i_spinbox.value())
     
@@ -101,9 +121,7 @@ def redraw_plot():
                                                ui.setup_panel.number_spinbox.value())
         ui.setup_panel.number_spinbox.setMaximum(round(ui.setup_panel.time_spinbox.value() / 
                                                  ui.setup_panel.period_spinbox.value()))
-
-    if (ui.time_panel.auto_button.isChecked()):
-        if (ui.choose_panel.radio_radiobutton.isChecked()):
+        if (ui.time_panel.auto_button.isChecked()):
             ui.time_panel.time_stop_spinbox.setValue(radio.xpoints[-1])
             ui.time_panel.time_start_spinbox.setValue(radio.xpoints[0])
             
@@ -115,10 +133,19 @@ def redraw_plot():
                         number = ui.setup_panel.number_spinbox.value(),
                         period_packet = ui.setup_panel.time_spinbox.value())
             radio.auto(50, ui.time_panel.auto_spinbox.value())
-            plotb()
+        else:
+            radio.configure(frequency = ui.setup_panel.f_spinbox.value(), 
+                            amplify_i = ui.setup_panel.ku_i_spinbox.value(),
+                            amplify_q = ui.setup_panel.ku_q_spinbox.value(),
+                            length = ui.setup_panel.pulse_spinbox.value(),
+                            period_pulse = ui.setup_panel.period_spinbox.value(),
+                            number = ui.setup_panel.number_spinbox.value(),
+                            period_packet = ui.setup_panel.time_spinbox.value())
+            radio.time_configure()
+        plotb()
 
-
-        if (ui.choose_panel.radio_radiobutton.isChecked() == 0):
+    if (ui.choose_panel.nlchm_radiobutton.isChecked() or ui.choose_panel.lchm_radiobutton.isChecked()):
+        if (ui.time_panel.auto_button.isChecked()):
             ui.time_panel.time_stop_spinbox.setValue(radio_mod.Time[-1])
             ui.time_panel.time_start_spinbox.setValue(radio_mod.Time[0])
             
@@ -129,30 +156,17 @@ def redraw_plot():
                                        T = ui.setup_panel.period_spinbox.value())
             radio_mod.AutoGen(50, ui.time_panel.auto_spinbox.value())
             plotb()
-            
-        
-    else:
-        if (ui.choose_panel.radio_radiobutton.isChecked()):
-            radio.configure(frequency = ui.setup_panel.f_spinbox.value(), 
-                            amplify_i = ui.setup_panel.ku_i_spinbox.value(),
-                            amplify_q = ui.setup_panel.ku_q_spinbox.value(),
-                            length = ui.setup_panel.pulse_spinbox.value(),
-                            period_pulse = ui.setup_panel.period_spinbox.value(),
-                            number = ui.setup_panel.number_spinbox.value(),
-                            period_packet = ui.setup_panel.time_spinbox.value())
-            radio.time_configure()
-        if (ui.choose_panel.radio_radiobutton.isChecked() == 0):
+        else:
             radio_mod.Configure_values(Amplify_I = ui.setup_panel.ku_i_spinbox.value(),
                                        Amplify_Q = ui.setup_panel.ku_q_spinbox.value(),
                                        F = ui.setup_panel.f_spinbox.value(),
                                        Imp = ui.setup_panel.pulse_spinbox.value(),
                                        T = ui.setup_panel.period_spinbox.value())
             
-        redraw_plot_time()
+            redraw_plot_time()
         
 
 def auto_but():
-
     if (ui.time_panel.auto_button.isChecked()):
         ui.time_panel.time_stop_spinbox.setEnabled(0)
         ui.time_panel.time_start_spinbox.setEnabled(0)

@@ -51,7 +51,7 @@ class SignalCl:
     def Configure_time(self, Start = None, Stop = None):
         
         self.Start = 0
-        self.time = 100
+        self.time = 1000
         if Start != None and Stop != None:
             self.Start = Start*Mult
             self.time = Stop - Start

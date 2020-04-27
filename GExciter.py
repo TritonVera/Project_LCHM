@@ -78,10 +78,9 @@ def N_LNF(): #Н_ЛЧМ
     ui.setup_panel.pulse_spinbox.setRange(0.01,200)
     ui.setup_panel.pulse_spinbox.setValue(100)
 
-    ui.setup_panel.period_spinbox.setRange(0.01,200)
+    ui.setup_panel.period_spinbox.setRange(0.01,2000)
     ui.setup_panel.period_spinbox.setSingleStep(0.01)
-
-    ui.setup_panel.period_spinbox.setValue(125)
+    ui.setup_panel.period_spinbox.setValue(1000)
 
     radio_mod.Configure_values(F = ui.setup_panel.f_spinbox.value())
 

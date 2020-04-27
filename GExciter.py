@@ -70,19 +70,18 @@ def N_LNF(): #Н_ЛЧМ
     ui.time_panel.time_start_spinbox.setValue(0)
     ui.time_panel.auto_button.setEnabled(1)
     
-    ui.setup_panel.f_spinbox.setMaximum(1)
-    ui.setup_panel.f_spinbox.setMinimum(0.0001)
+
+    ui.setup_panel.f_spinbox.setRange(0.0001,1)
     ui.setup_panel.f_spinbox.setDecimals(4)
     ui.setup_panel.f_spinbox.setValue(0.1)
     ui.setup_panel.f_spinbox.setSingleStep(0.0001)
 
-    ui.setup_panel.pulse_spinbox.setMaximum(200)
-    ui.setup_panel.pulse_spinbox.setMinimum(0.01)
+    ui.setup_panel.pulse_spinbox.setRange(0.01,200)
     ui.setup_panel.pulse_spinbox.setValue(100)
 
-    ui.setup_panel.period_spinbox.setMaximum(200)
-    ui.setup_panel.period_spinbox.setMinimum(0.01)
+    ui.setup_panel.period_spinbox.setRange(0.01,200)
     ui.setup_panel.period_spinbox.setSingleStep(0.01)
+
     ui.setup_panel.period_spinbox.setValue(125)
 
     radio_mod.Configure_values(F = ui.setup_panel.f_spinbox.value())

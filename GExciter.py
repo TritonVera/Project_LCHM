@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Fri Feb 14 21:21:17 2020
@@ -58,15 +58,18 @@ def N_LNF(): #Н_ЛЧМ
     elif ui.choose_panel.lchm_radiobutton.isChecked():
         radio_mod.type_of_signal = "LNF"
     
-    ui.setup_panel.f_spinbox.setMaximum(1)
-    ui.setup_panel.f_spinbox.setMinimum(0.0001)    
-    ui.setup_panel.pulse_spinbox.setMaximum(200)
-    ui.setup_panel.pulse_spinbox.setMinimum(0.01)
-    ui.setup_panel.period_spinbox.setMaximum(200)
-    ui.setup_panel.period_spinbox.setMinimum(0)
-    
+
+    ui.setup_panel.f_spinbox.setRange(0.0001,1)
+    ui.setup_panel.f_spinbox.setDecimals(4)
     ui.setup_panel.f_spinbox.setValue(0.1)
+    ui.setup_panel.f_spinbox.setSingleStep(0.0001)
+
+    ui.setup_panel.pulse_spinbox.setRange(0.01,200)
     ui.setup_panel.pulse_spinbox.setValue(100)
+
+    ui.setup_panel.period_spinbox.setRange(0.01,200)
+    ui.setup_panel.period_spinbox.setSingleStep(0.01)
+
     ui.setup_panel.period_spinbox.setValue(125)
 
     radio_mod.Configure_values(F = ui.setup_panel.f_spinbox.value())

@@ -107,7 +107,7 @@ class SignalCl:
         add_dots = int(one_computation_add_time*(f+deltaF)*self.dots_per_osc)
         add_per_osc = self.dots_per_osc
         
-        if add_dots < 20:
+        if add_dots < 20 and Speed != 0:
             add_dots = 20
             add_per_osc = add_dots/(one_computation_add_time*(f+deltaF))
             

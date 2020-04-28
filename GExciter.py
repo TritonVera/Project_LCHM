@@ -55,6 +55,10 @@ def radio_push():
         ui.setup_panel.pulse_spinbox.setRange(0.01, 200)
         ui.setup_panel.pulse_spinbox.setValue(2)
         ui.setup_panel.pulse_spinbox.setSingleStep(0.1)
+
+        formula_text = "Сигнал: S(t) = cos(" + str(ui.setup_panel.f_spinbox.value()) + "t)" + \
+                                      "sin(" + str(ui.setup_panel.f_spinbox.value()) + "t)"
+        ui.setup_panel.formula_label.setText(formula_text)
         plotb()
 
 

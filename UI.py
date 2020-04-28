@@ -119,11 +119,18 @@ class SetupPanel(QWidget):
         inner_grid_layout = QGridLayout(setup_box)
         
         # Create elements
+        self.formula_label = QLabel("Сигнал: ", setup_box)
+        self.formula_label.setFixedSize(300, 10)
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
         self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
         self.ku_q_label = QLabel("Коэф. усиления Q:", setup_box)
         self.ku_q_spinbox = QDoubleSpinBox(setup_box)
+        self.ku_i_spinbox.setVisible(0)
+        self.ku_i_label.setVisible(0)
+        self.ku_q_spinbox.setVisible(0)
+        self.ku_q_label.setVisible(0)
+        self.divide_button.setVisible(0)
         f_label = QLabel("Частота:", setup_box)
         self.f_spinbox = QDoubleSpinBox(setup_box)
         self.time_label = QLabel("Период пачки:", setup_box)
@@ -174,6 +181,7 @@ class SetupPanel(QWidget):
         self.divide_button.setCheckable(1)
 
         # Pack elements
+        inner_grid_layout.addWidget(self.formula_label, 0, 0, 1, -1)
         inner_grid_layout.addWidget(self.ku_i_label, 1, 0)
         inner_grid_layout.addWidget(self.ku_i_spinbox, 1, 1)
         inner_grid_layout.addWidget(self.divide_button, 0, 0, 1, -1)

@@ -57,12 +57,24 @@ def radio_push():
         ui.setup_panel.pulse_spinbox.setValue(2)
         ui.setup_panel.pulse_spinbox.setSingleStep(0.1)
 
+        ui.setup_panel.ku_i_label.setVisible(1)
+        ui.setup_panel.ku_i_spinbox.setVisible(1)
+        ui.setup_panel.ku_q_label.setVisible(1)
+        ui.setup_panel.ku_q_spinbox.setVisible(1)
+        ui.setup_panel.divide_button.setVisible(1)
+
         ui.setup_panel.formula_label.setVisible(0)
 
         plotb()
 
 
 def N_LNF(): #Н_ЛЧМ
+    ui.setup_panel.ku_i_label.setVisible(0)
+    ui.setup_panel.ku_i_spinbox.setVisible(0)
+    ui.setup_panel.ku_q_label.setVisible(0)
+    ui.setup_panel.ku_q_spinbox.setVisible(0)
+    ui.setup_panel.divide_button.setVisible(0)
+
     ui.setup_panel.formula_label.setVisible(1)
     ui.setup_panel.time_spinbox.setVisible(0)
     ui.setup_panel.time_label.setVisible(0)

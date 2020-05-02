@@ -179,6 +179,11 @@ class SetupPanel(QWidget):
         self.number_label.setVisible(0)
         self.divide_button.setCheckable(1)
 
+        self.ku_i_label.setVisible(0)
+        self.ku_i_spinbox.setVisible(0)
+        self.ku_q_label.setVisible(0)
+        self.ku_q_spinbox.setVisible(0)
+        self.divide_button.setVisible(0)
         # Pack elements
         inner_grid_layout.addWidget(self.formula_label, 0, 0, 1, -1)
         inner_grid_layout.addWidget(self.ku_i_label, 2, 0)

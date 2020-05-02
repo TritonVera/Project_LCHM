@@ -57,14 +57,13 @@ def radio_push():
         ui.setup_panel.pulse_spinbox.setValue(2)
         ui.setup_panel.pulse_spinbox.setSingleStep(0.1)
 
-        formula_text = "Сигнал:\n"+"S(t) = cos(" + str(ui.setup_panel.f_spinbox.value()) + "t)" + \
-                                      "sin(" + str(ui.setup_panel.f_spinbox.value()) + "t)"
-        ui.setup_panel.formula_label.setText(formula_text)
+        ui.setup_panel.formula_label.setVisible(0)
 
         plotb()
 
 
 def N_LNF(): #Н_ЛЧМ
+    ui.setup_panel.formula_label.setVisible(1)
     ui.setup_panel.time_spinbox.setVisible(0)
     ui.setup_panel.time_label.setVisible(0)
     ui.setup_panel.number_spinbox.setVisible(0)

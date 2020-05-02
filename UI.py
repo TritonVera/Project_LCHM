@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Sat Feb 29 15:10:12 2020
 
@@ -119,6 +119,11 @@ class SetupPanel(QWidget):
         inner_grid_layout = QGridLayout(setup_box)
         
         # Create elements
+
+        self.formula_label = QLabel("", setup_box)
+        self.formula_label.setFixedSize(300, 120)
+        self.formula_label.setAlignment(Qt.AlignVCenter)
+
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
         self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)

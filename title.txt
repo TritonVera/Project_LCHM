@@ -1,0 +1,22 @@
+[Main]
+FileType=USR
+Version=2.00
+Program=Micro-Cap
+
+[Menu]
+;Simple    = T,X,Y
+;SimpleNoX = T,Y
+;Complex   = F,Xr,Xi,Yr,Yi
+;ComplexNoX= F,Yr,Yi
+;FormatType = Simple | Complex | SimpleNoX | ComplexNoX
+;Format=FormatType
+WaveformMenu=label vs T
+
+[Waveform]
+Label=label vs T
+MainX=T
+LabelX=T
+LabelY=label vs T
+Format=SimpleNoX
+Data Point Count=60000
+0,0

@@ -35,12 +35,13 @@ class SignalCl:
     def Setup_par(self,F,Imp,T):
         global f, w0, deltaF, deltaW_N, deltaW_L, imp, space
 
-        f = F
-        w0 = 2*pi*f
+        f = F*10**6
+        deltaF = 0.5*f
+        w0 = 2*pi*(f - deltaF)
         
-        deltaF = 2*f
-        deltaW_N = 2*pi*deltaF
-        deltaW_L = 2*pi*deltaF
+        
+        deltaW_N = 2*pi*(2*deltaF)
+        deltaW_L = 2*pi*(2*deltaF)
 
         imp = Imp*Mult
         space = (T-Imp)*Mult
@@ -51,7 +52,7 @@ class SignalCl:
     def Configure_time(self, Start = None, Stop = None):
         
         self.Start = 0
-        self.time = 1000
+        self.time = 100
         if Start != None and Stop != None:
             self.Start = Start*Mult
             self.time = Stop - Start
@@ -73,7 +74,7 @@ class SignalCl:
         self.Amplify_I = Amplify_I
         self.Amplify_Q = Amplify_Q
         
-        self.Setup_par(F*10**6, Imp, T)
+        self.Setup_par(F, Imp, T)
         
         return(0)
 
@@ -143,6 +144,17 @@ class SignalCl:
         Q = A_Q*sin(fi_t+fi0)
         S = I*cos(w0*i)-Q*sin(w0*i)
 
+
+#        if i*10**6 > 0 and i*10**6 < 0.5:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+#        if i*10**6 > 49.9 and i*10**6 < 50.5:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+#        if i*10**6 > 99 and i*10**6 < 101:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+#        if i*10**6 > 100 and i*10**6 < 105:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+        
+
         return(S,I,Q)
 
     def LNF(self,i):
@@ -152,11 +164,18 @@ class SignalCl:
         
         fi0 = 0
         fi_t = (deltaW_L/imp)*i**2
+
         I = A_I*cos(fi_t+fi0)
         Q = A_Q*sin(fi_t+fi0)
         S = I*cos(w0*i)-Q*sin(w0*i)
 
+#        if i*10**6 > 0 and i*10**6 < 0.5:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+#        if i*10**6 > 49.9 and i*10**6 < 50.5:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+#        if i*10**6 > 99 and i*10**6 < 101:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+#        if i*10**6 > 100 and i*10**6 < 105:
+#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
+        
         return(S,I,Q)
-        
-
-        

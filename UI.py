@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Sat Feb 29 15:10:12 2020
 
@@ -120,6 +120,12 @@ class SetupPanel(QWidget):
         inner_grid_layout = QGridLayout(setup_box)
         
         # Create elements
+
+        self.formula_label = QLabel("", setup_box)
+        self.formula_label.setFixedSize(300, 120)
+        self.formula_label.setAlignment(Qt.AlignVCenter)
+        self.formula_label.setVisible(0)
+
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
         self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
@@ -179,22 +185,28 @@ class SetupPanel(QWidget):
         self.number_label.setVisible(0)
         self.divide_button.setCheckable(1)
 
+        self.ku_i_label.setVisible(0)
+        self.ku_i_spinbox.setVisible(0)
+        self.ku_q_label.setVisible(0)
+        self.ku_q_spinbox.setVisible(0)
+        self.divide_button.setVisible(0)
         # Pack elements
-        inner_grid_layout.addWidget(self.ku_i_label, 1, 0)
-        inner_grid_layout.addWidget(self.ku_i_spinbox, 1, 1)
-        inner_grid_layout.addWidget(self.divide_button, 0, 0, 1, -1)
-        inner_grid_layout.addWidget(self.ku_q_label, 2, 0)
-        inner_grid_layout.addWidget(self.ku_q_spinbox, 2, 1)
-        inner_grid_layout.addWidget(f_label, 3, 0)
-        inner_grid_layout.addWidget(self.f_spinbox, 3, 1)
-        inner_grid_layout.addWidget(self.time_label, 4, 0)
-        inner_grid_layout.addWidget(self.time_spinbox, 4, 1)
-        inner_grid_layout.addWidget(self.period_label, 5, 0)
-        inner_grid_layout.addWidget(self.period_spinbox, 5, 1)
-        inner_grid_layout.addWidget(self.number_label, 6, 0)
-        inner_grid_layout.addWidget(self.number_spinbox, 6, 1)
-        inner_grid_layout.addWidget(self.pulse_label, 7, 0)
-        inner_grid_layout.addWidget(self.pulse_spinbox, 7, 1)
+        inner_grid_layout.addWidget(self.formula_label, 0, 0, 1, -1)
+        inner_grid_layout.addWidget(self.ku_i_label, 2, 0)
+        inner_grid_layout.addWidget(self.ku_i_spinbox, 2, 1)
+        inner_grid_layout.addWidget(self.divide_button, 1, 0, 1, -1)
+        inner_grid_layout.addWidget(self.ku_q_label, 3, 0)
+        inner_grid_layout.addWidget(self.ku_q_spinbox, 3, 1)
+        inner_grid_layout.addWidget(f_label, 4, 0)
+        inner_grid_layout.addWidget(self.f_spinbox, 4, 1)
+        inner_grid_layout.addWidget(self.time_label, 5, 0)
+        inner_grid_layout.addWidget(self.time_spinbox, 5, 1)
+        inner_grid_layout.addWidget(self.period_label, 6, 0)
+        inner_grid_layout.addWidget(self.period_spinbox, 6, 1)
+        inner_grid_layout.addWidget(self.number_label, 7, 0)
+        inner_grid_layout.addWidget(self.number_spinbox, 7, 1)
+        inner_grid_layout.addWidget(self.pulse_label, 8, 0)
+        inner_grid_layout.addWidget(self.pulse_spinbox, 8, 1)
 
         #Ending packers
         setup_box.setLayout(inner_grid_layout)

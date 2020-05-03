@@ -33,6 +33,12 @@ def plotb(): #Построить
 
 def radio_push():
     if ui.choose_panel.radio_radiobutton.isChecked():
+        ui.plot_panel.add_plot.setVisible(0)
+        if ui.graph_panel.Z_box.isChecked():
+            ui.plot_panel.z_flag = 1
+        else:
+            ui.plot_panel.z_flag = 0
+
         ui.time_panel.time_stop_spinbox.setValue(20)
         ui.time_panel.time_stop_spinbox.setEnabled(1)
         ui.time_panel.time_start_spinbox.setValue(0)
@@ -63,19 +69,34 @@ def radio_push():
         ui.setup_panel.ku_q_spinbox.setVisible(1)
         ui.setup_panel.divide_button.setVisible(1)
 
-        ui.setup_panel.formula_label.setVisible(0)
+        # ui.setup_panel.formula_label.setVisible(0)
 
         plotb()
 
 
 def N_LNF(): #Н_ЛЧМ
+    if ui.choose_panel.nlchm_radiobutton.isChecked():
+        radio_mod.type_of_signal = "NLNF"
+        ui.plot_panel.add_plot.show()
+        if ui.graph_panel.Z_box.isChecked():
+            ui.plot_panel.z_flag = 2
+        else:
+            ui.plot_panel.z_flag = 0
+    elif ui.choose_panel.lchm_radiobutton.isChecked():
+        radio_mod.type_of_signal = "LNF"
+        ui.plot_panel.add_plot.setVisible(0)
+        if ui.graph_panel.Z_box.isChecked():
+            ui.plot_panel.z_flag = 1
+        else:
+            ui.plot_panel.z_flag = 0
+
     ui.setup_panel.ku_i_label.setVisible(0)
     ui.setup_panel.ku_i_spinbox.setVisible(0)
     ui.setup_panel.ku_q_label.setVisible(0)
     ui.setup_panel.ku_q_spinbox.setVisible(0)
     ui.setup_panel.divide_button.setVisible(0)
 
-    ui.setup_panel.formula_label.setVisible(1)
+    # ui.setup_panel.formula_label.setVisible(1)
     ui.setup_panel.time_spinbox.setVisible(0)
     ui.setup_panel.time_label.setVisible(0)
     ui.setup_panel.number_spinbox.setVisible(0)
@@ -100,50 +121,45 @@ def N_LNF(): #Н_ЛЧМ
     ui.setup_panel.period_spinbox.setValue(1000)
 
     radio_mod.Configure_values(F = ui.setup_panel.f_spinbox.value())
-
-    if ui.choose_panel.nlchm_radiobutton.isChecked():
-        radio_mod.type_of_signal = "NLNF"
-    elif ui.choose_panel.lchm_radiobutton.isChecked():
-        radio_mod.type_of_signal = "LNF"
     
-    PrintFreq()
+    # PrintFreq()
     redraw_plot_time()
     
-def PrintFreq():
+# def PrintFreq():
     
-    f0 = ui.setup_panel.f_spinbox.value()
-    imp = ui.setup_panel.pulse_spinbox.value()
+#     f0 = ui.setup_panel.f_spinbox.value()
+#     imp = ui.setup_panel.pulse_spinbox.value()
 
-    Fmin = str('{0:5.5f}'.format(f0-0.5*f0))
-    if imp != 0:
-        b = str('{0:5.5f}'.format((1.5*f0-0.5*f0)/(imp)))
-        w = 2*pi*(0.5*f0) + 2*pi*(f0/imp)*imp/2
-        f = str('{0:5.5f}'.format(w/(2*pi)))
+#     Fmin = str('{0:5.5f}'.format(f0-0.5*f0))
+#     if imp != 0:
+#         b = str('{0:5.5f}'.format((1.5*f0-0.5*f0)/(imp)))
+#         w = 2*pi*(0.5*f0) + 2*pi*(f0/imp)*imp/2
+#         f = str('{0:5.5f}'.format(w/(2*pi)))
         
-        b_n = str('{0:5.5f}'.format((1.5*f0-0.5*f0)))
-        w_n = 2*pi*(0.5*f0) + 2*pi*(f0/imp**8)*pow(imp/2,8)
-        f_n = str('{0:5.5f}'.format(w_n/(2*pi)))
-    else:
-        b = "nan"
+#         b_n = str('{0:5.5f}'.format((1.5*f0-0.5*f0)))
+#         w_n = 2*pi*(0.5*f0) + 2*pi*(f0/imp**8)*pow(imp/2,8)
+#         f_n = str('{0:5.5f}'.format(w_n/(2*pi)))
+#     else:
+#         b = "nan"
     
     
-    Signals = {'LNF':"Закон изменения частоты:\n"+\
-                     "Fmax = 1.5*f0\n"+\
-                     "Fmin = 0.5*f0\n"+\
-                     "b = (Fmax-Fmin)/imp\n"+\
-                     "w(t) = 2pi*Fmin + 2pi*b*t"+"\n"+\
-                     "w(t) = 2pi*"+Fmin+"+2pi*"+b+"*t\n"+\
-                     "f(imp/2) ="+f,\
-               'NLNF':"Закон изменения частоты:\n"+\
-                     "Fmax = 1.5*f0\n"+\
-                     "Fmin = 0.5*f0\n"+\
-                     "b = (Fmax-Fmin)/imp**8\n"+\
-                     "w(t) = 2pi*Fmin + 2pi*b*t**8"+"\n"+\
-                     "w(t) = 2pi*"+Fmin+"+2pi*"+b_n+"*"+str(imp)+"**(-8)*t\n"+\
-                     "f(imp/2) ="+f_n}
+#     Signals = {'LNF':"Закон изменения частоты:\n"+\
+#                      "Fmax = 1.5*f0\n"+\
+#                      "Fmin = 0.5*f0\n"+\
+#                      "b = (Fmax-Fmin)/imp\n"+\
+#                      "w(t) = 2pi*Fmin + 2pi*b*t"+"\n"+\
+#                      "w(t) = 2pi*"+Fmin+"+2pi*"+b+"*t\n"+\
+#                      "f(imp/2) ="+f,\
+#                'NLNF':"Закон изменения частоты:\n"+\
+#                      "Fmax = 1.5*f0\n"+\
+#                      "Fmin = 0.5*f0\n"+\
+#                      "b = (Fmax-Fmin)/imp**8\n"+\
+#                      "w(t) = 2pi*Fmin + 2pi*b*t**8"+"\n"+\
+#                      "w(t) = 2pi*"+Fmin+"+2pi*"+b_n+"*"+str(imp)+"**(-8)*t\n"+\
+#                      "f(imp/2) ="+f_n}
     
-    formula_text = Signals[radio_mod.type_of_signal]
-    ui.setup_panel.formula_label.setText(formula_text)
+#     formula_text = Signals[radio_mod.type_of_signal]
+#     ui.setup_panel.formula_label.setText(formula_text)
     
 
 def redraw_plot_time():
@@ -213,7 +229,7 @@ def redraw_plot():
                                        F = ui.setup_panel.f_spinbox.value(),
                                        Imp = ui.setup_panel.pulse_spinbox.value(),
                                        T = ui.setup_panel.period_spinbox.value())
-            PrintFreq()
+            # PrintFreq()
             redraw_plot_time()
         
 
@@ -257,7 +273,10 @@ def visible_q():
 
 def visible_z():
     if ui.graph_panel.Z_box.isChecked():
-        ui.plot_panel.z_flag = 1
+        if ui.choose_panel.nlchm_radiobutton.isChecked():
+            ui.plot_panel.z_flag = 2
+        else:
+            ui.plot_panel.z_flag = 1
         plotb()
     else:
         ui.plot_panel.z_flag = 0

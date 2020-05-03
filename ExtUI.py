@@ -17,12 +17,15 @@ class PlotPanel(QWidget):
         self.q_flag = 1;
         self.z_flag = 1;
 
+        self.add_plot = QwtPlot(self)
+        self.add_plot.setVisible(0)
         self.plot = QwtPlot(self)
         self.line_i = QwtPlotCurve()
         self.line_q = QwtPlotCurve()
         self.line_z = QwtPlotCurve()
         self.draw_plot()
 
+        vertical_layout.addWidget(self.add_plot)
         vertical_layout.addWidget(self.plot)
 
         self.setLayout(vertical_layout)
@@ -63,40 +66,13 @@ class PlotPanel(QWidget):
 
         self.line_z.setData(x_list, z_list)
         self.line_z.setPen(z_pen)
-        if self.z_flag:
+        if (self.z_flag == 1):
             self.line_z.attach(self.plot)
+        elif (self.z_flag == 2):
+            self.line_z.attach(self.add_plot)
         else:
             self.line_z.detach()
 
+        self.add_plot.replot()
         self.plot.replot()
         self.plot.show()
-
-
-# class SetupWindow(QGroupBox):
-#     def __init__(self, parent = None):
-#         QGroupBox.__init__(self, parent)
-#         print(parent)
-
-
-# class MyLabel(QLabel):
-#     def __init__ (self, text = None, parent = None, subparent = None):
-#         QLabel.__init__(self, text, parent)
-#         self.subparent = subparent
-#         self.setMouseTracking(1)
-#         self.setup_window = SetupWindow(self.subparent)
-
-#     def mouseMoveEvent(self, event):
-#         posx = event.x()
-#         posy = event.y()
-#         #print("Координаты:\n x = %d  y = %d" % (posx, posy))
-
-#         if posx > 38 and posy > 3 and posy < 15:
-#             print("Координаты:\n x = %d  y = %d" % (posx, posy))
-#             position_x = self.x() + posx + 20
-#             position_y = self.y() + self.height() / 2
-#             self.setup_window.setGeometry(300, 100, 50, 100)
-#             self.setup_window.setEnabled(1)
-#         else:
-#             print("Another")
-#             if (self.setup_window.isEnabled()):
-#                 self.setup_window.setEnabled(0)

@@ -121,10 +121,10 @@ class SetupPanel(QWidget):
         
         # Create elements
 
-        self.formula_label = QLabel("", setup_box)
-        self.formula_label.setFixedSize(300, 120)
-        self.formula_label.setAlignment(Qt.AlignVCenter)
-        self.formula_label.setVisible(0)
+        # self.formula_label = QLabel("", setup_box)
+        # self.formula_label.setFixedSize(300, 120)
+        # self.formula_label.setAlignment(Qt.AlignVCenter)
+        # self.formula_label.setVisible(0)
 
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
@@ -165,7 +165,7 @@ class SetupPanel(QWidget):
         self.time_spinbox.setSingleStep(1)
         self.time_spinbox.setRange(1, 1000)
 
-        self.number_spinbox.setValue(10)
+        self.number_spinbox.setValue(4)
         self.number_spinbox.setSingleStep(1)
         self.number_spinbox.setRange(1, 100)
 
@@ -191,7 +191,7 @@ class SetupPanel(QWidget):
         self.ku_q_spinbox.setVisible(0)
         self.divide_button.setVisible(0)
         # Pack elements
-        inner_grid_layout.addWidget(self.formula_label, 0, 0, 1, -1)
+        # inner_grid_layout.addWidget(self.formula_label, 0, 0, 1, -1)
         inner_grid_layout.addWidget(self.ku_i_label, 2, 0)
         inner_grid_layout.addWidget(self.ku_i_spinbox, 2, 1)
         inner_grid_layout.addWidget(self.divide_button, 1, 0, 1, -1)

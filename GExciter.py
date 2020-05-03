@@ -38,21 +38,6 @@ def radio_push():
         ui.time_panel.time_start_spinbox.setEnabled(1)
         ui.time_panel.auto_button.setEnabled(1)
 
-        test_label = """
-<html>
-   <body>
-      <p>
-         <b>
-            Этот текст будет полужирным, <i>а этот — ещё и курсивным</i>.
-         </b>
-      </p>
-   </body>
-</html>
-        """
-        ui.setup_panel.formula_view.setVisible(1)
-        ui.setup_panel.formula_view.setHtml(test_label)
-        ui.setup_panel.formula_view.show();
-
         ui.setup_panel.time_spinbox.setVisible(1)
         ui.setup_panel.time_label.setVisible(1)
         ui.setup_panel.number_spinbox.setVisible(1)

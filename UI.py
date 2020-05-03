@@ -120,9 +120,6 @@ class SetupPanel(QWidget):
         inner_grid_layout = QGridLayout(setup_box)
         
         # Create elements
-        self.formula_view = QWebEngineView(setup_box)
-        self.formula_view.setMaximumHeight(50);
-        self.formula_view.setVisible(0)
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
         self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
@@ -183,7 +180,6 @@ class SetupPanel(QWidget):
         self.divide_button.setCheckable(1)
 
         # Pack elements
-        inner_grid_layout.addWidget(self.formula_view, 0, 0, 1, -1)
         inner_grid_layout.addWidget(self.ku_i_label, 1, 0)
         inner_grid_layout.addWidget(self.ku_i_spinbox, 1, 1)
         inner_grid_layout.addWidget(self.divide_button, 0, 0, 1, -1)

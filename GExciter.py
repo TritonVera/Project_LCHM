@@ -29,8 +29,7 @@ def plotb(): #Построить
         ui.plot_panel.draw_plot(radio.xpoints, radio.Ipoints, radio.Qpoints, radio.Zpoints)
     elif (ui.choose_panel.nlchm_radiobutton.isChecked() or ui.choose_panel.lchm_radiobutton.isChecked()):
         ui.plot_panel.draw_plot(radio_mod.Time, radio_mod.I, radio_mod.Q, radio_mod.Signal)
-        if ui.time_panel.auto_button.isChecked() == 0:
-          ui.plot_panel.draw_addPlot(radio_mod.Time, radio_mod.Wt)
+        ui.plot_panel.draw_addPlot(radio_mod.Time, radio_mod.Wt)
 
 
 def radio_push():

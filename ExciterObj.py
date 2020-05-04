@@ -121,6 +121,7 @@ class SignalCl:
         self.Signal.extend(self.Par[1])
         self.I.extend(self.Par[2])
         self.Q.extend(self.Par[3])
+        self.Wt.extend(self.Par[4])
 
         
         if self.Time[-1]-self.Time[0] > self.time:
@@ -130,6 +131,7 @@ class SignalCl:
                 del self.Signal[0]
                 del self.I[0]
                 del self.Q[0]
+                del self.Wt[0]
                 if self.Time[-1]-self.Time[0] <= self.time:
                     compare = True
         

@@ -65,6 +65,7 @@ class SignalCl:
         self.Signal = self.Par[1]
         self.I = self.Par[2]
         self.Q = self.Par[3]
+        self.Wt = self.Par[4]
         
         
         return(0)
@@ -84,6 +85,7 @@ class SignalCl:
         Signal = [0]*N
         I = [0]*N
         Q = [0]*N
+        Wt = [0]*N
         
         Signals = {'LNF':self.LNF,'NLNF':self.NLNF}
         T = imp + space
@@ -93,14 +95,14 @@ class SignalCl:
             K = int(now/T)
             
             Time[i] = (now - space)/Mult
-            Signal[i], I[i], Q[i] = Signals[self.type_of_signal](now-K*T-space)
+            Signal[i], I[i], Q[i], Wt[i] = Signals[self.type_of_signal](now-K*T-space)
             
             if now >= T*K and now < T*K+space:
                 Signal[i] = 0
                 I[i] = 0
                 Q[i] = 0
         
-        return(Time, Signal, I, Q)
+        return(Time, Signal, I, Q, Wt)
         
     def AutoGen(self, FPS = 50, Speed = 10):
         
@@ -136,26 +138,16 @@ class SignalCl:
 
         A_I = A * self.Amplify_I
         A_Q = A * self.Amplify_Q
+        
         fi0 = 0
-#        F0 = 0
-#        fi_t = (deltaW_N/Omega)*sin(Omega*i+F0)
         fi_t = (deltaW_N/imp**8)*i**9
+        Wt = (w0 + (deltaW_N/imp**8)*i**8)/(2*pi*10**6)
+        
         I = A_I*cos(fi_t+fi0)
         Q = A_Q*sin(fi_t+fi0)
-        S = I*cos(w0*i)-Q*sin(w0*i)
+        S = I*cos(w0*i)-Q*sin(w0*i)        
 
-
-#        if i*10**6 > 0 and i*10**6 < 0.5:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-#        if i*10**6 > 49.9 and i*10**6 < 50.5:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-#        if i*10**6 > 99 and i*10**6 < 101:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-#        if i*10**6 > 100 and i*10**6 < 105:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp**8)*i**8)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-        
-
-        return(S,I,Q)
+        return(S,I,Q,Wt)
 
     def LNF(self,i):
         
@@ -164,18 +156,10 @@ class SignalCl:
         
         fi0 = 0
         fi_t = (deltaW_L/imp)*i**2
-
+        Wt = (w0 + (deltaW_L/imp)*i)/(2*pi*10**6)
+        
         I = A_I*cos(fi_t+fi0)
         Q = A_Q*sin(fi_t+fi0)
         S = I*cos(w0*i)-Q*sin(w0*i)
-
-#        if i*10**6 > 0 and i*10**6 < 0.5:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-#        if i*10**6 > 49.9 and i*10**6 < 50.5:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-#        if i*10**6 > 99 and i*10**6 < 101:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
-#        if i*10**6 > 100 and i*10**6 < 105:
-#            print("t: ",'{0:8.5f}'.format(i*10**6)," f(t):",'{0:12.5f}'.format((w0+(deltaW_L/imp)*i)/(2*pi)),"f0:",w0/(2*pi)," deltaf:",deltaW_L/(2*pi))
         
-        return(S,I,Q)
+        return(S,I,Q,Wt)

@@ -16,6 +16,7 @@ class PlotPanel(QWidget):
         self.i_flag = 1;
         self.q_flag = 1;
         self.z_flag = 1;
+        self.w_flag = 1;
 
         self.add_plot = QwtPlot(self)
         self.add_plot.setVisible(0)
@@ -23,17 +24,39 @@ class PlotPanel(QWidget):
         self.line_i = QwtPlotCurve()
         self.line_q = QwtPlotCurve()
         self.line_z = QwtPlotCurve()
+        self.line_w = QwtPlotCurve()
         self.draw_plot()
 
-        vertical_layout.addWidget(self.add_plot)
         vertical_layout.addWidget(self.plot)
+        vertical_layout.addWidget(self.add_plot)
 
         self.setLayout(vertical_layout)
+        
+    def draw_addPlot(self,x_points = [], w_points = []):
+        
+        x_list = np.asarray(x_points)
+        w_list = np.asarray(w_points)
 
-    def draw_plot(self, x_points = [], i_points = [], q_points = [], z_points = []):
+        w_color = QColor(0, 128, 128)
+        w_pen = QPen(w_color)
+        w_pen.setWidth(2)
+        
+        self.line_w.setData(x_list, w_list)
+        self.line_w.setPen(w_pen)
+        if self.w_flag:
+            self.line_w.attach(self.add_plot)
+        else:
+            self.line_w.detach()
+                    
+        self.add_plot.replot()
+      
+    def draw_plot(self, x_points = [], i_points = [], q_points = [], z_points = [],):
         x_list = np.asarray(x_points)
         i_list = np.asarray(i_points)
+        q_list = np.asarray(q_points)
+        z_list = np.asarray(z_points)
 
+        
         i_color = QColor(255, 0, 255)
         i_pen = QPen(i_color)
         i_pen.setWidth(2)
@@ -44,8 +67,6 @@ class PlotPanel(QWidget):
             self.line_i.attach(self.plot)
         else:
             self.line_i.detach()
-
-        q_list = np.asarray(q_points)
 
         q_color = QColor(255, 0, 0)
         q_pen = QPen(q_color)
@@ -58,8 +79,6 @@ class PlotPanel(QWidget):
         else:
             self.line_q.detach()
 
-        z_list = np.asarray(z_points)
-
         z_color = QColor(0, 128, 128)
         z_pen = QPen(z_color)
         z_pen.setWidth(2)
@@ -71,8 +90,7 @@ class PlotPanel(QWidget):
         elif (self.z_flag == 2):
             self.line_z.attach(self.add_plot)
         else:
-            self.line_z.detach()
+            self.line_z.detach()        
 
-        self.add_plot.replot()
         self.plot.replot()
         self.plot.show()

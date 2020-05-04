@@ -70,7 +70,7 @@ class SignalCl:
         
         return(0)
         
-    def Configure_values(self, Amplify_I = 1, Amplify_Q = 1, F = 0.1, Imp = 100, T = 125):
+    def Configure_values(self, Amplify_I = 1, Amplify_Q = 1, F = 0.1, Imp = 100, T = 1000):
         
         self.Amplify_I = Amplify_I
         self.Amplify_Q = Amplify_Q
@@ -101,6 +101,7 @@ class SignalCl:
                 Signal[i] = 0
                 I[i] = 0
                 Q[i] = 0
+                Wt[i] = 0
         
         return(Time, Signal, I, Q, Wt)
         

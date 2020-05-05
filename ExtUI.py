@@ -56,6 +56,16 @@ class PlotPanel(QWidget):
         q_list = np.asarray(q_points)
         z_list = np.asarray(z_points)
 
+        z_color = QColor(0, 128, 128)
+        z_pen = QPen(z_color)
+        z_pen.setWidth(2)
+
+        self.line_z.setData(x_list, z_list)
+        self.line_z.setPen(z_pen)
+        if self.z_flag:
+            self.line_z.attach(self.plot)
+        else:
+            self.line_z.detach() 
         
         i_color = QColor(255, 0, 255)
         i_pen = QPen(i_color)
@@ -77,20 +87,7 @@ class PlotPanel(QWidget):
         if self.q_flag:
             self.line_q.attach(self.plot)
         else:
-            self.line_q.detach()
-
-        z_color = QColor(0, 128, 128)
-        z_pen = QPen(z_color)
-        z_pen.setWidth(2)
-
-        self.line_z.setData(x_list, z_list)
-        self.line_z.setPen(z_pen)
-        if (self.z_flag == 1):
-            self.line_z.attach(self.plot)
-        elif (self.z_flag == 2):
-            self.line_z.attach(self.add_plot)
-        else:
-            self.line_z.detach()        
+            self.line_q.detach()     
 
         self.plot.replot()
         self.plot.show()

@@ -11,9 +11,10 @@ class Radiopulse():
             self.__frequency = 2
             self.__amplify_i = 1
             self.__amplify_q = 1
-            self.__start_time  = 0
+            self.__start_time = 0
             self.__step_time = 1.0 / 360
-            self.__end_time  = 20
+            self.__end_time = 20
+            self.__phase = 0
 
             # Создание дискретов времени
             self.xpoints = self.arange(start = self.__start_time, stop = self.__end_time)
@@ -22,14 +23,15 @@ class Radiopulse():
             self.Ipoints = []      #Косинусоидальная квадратура сигнала
             self.Qpoints = []      #Синусоидальная квадратура сигнала
             self.Zpoints = []      #Комплексный сигнал
+            self.test_points = []  # Тестируемый сигнал 
 
             for i in self.xpoints:
                 self.gen_signal(i)
 
     #Конфигуратор сигнала
-    def configure(self, length = None, period_pulse = None,
-                  number = None, period_packet = None,
-                  frequency = None, amplify_i = None, amplify_q = None):
+    def configure(self, length = None, period_pulse = None, number = None,
+                  period_packet = None, frequency = None, amplify_i = None,
+                  amplify_q = None, phase = None):
         if (length != None):
             self.__length = length
         if (period_pulse != None):
@@ -44,6 +46,8 @@ class Radiopulse():
             self.__amplify_i = amplify_i
         if (amplify_q != None):
             self.__amplify_q = amplify_q
+        if (phase != None):
+            self.__phase = phase
 
     #Конфигуратор времени
     def time_configure(self, start_time = None, end_time = None):
@@ -60,6 +64,7 @@ class Radiopulse():
         self.Ipoints = []
         self.Qpoints = []
         self.Zpoints = []
+        self.test_points = []
 
         for i in self.xpoints:
             self.gen_signal(i)
@@ -70,22 +75,27 @@ class Radiopulse():
         if (in_time_c % self.__period_packet) > (self.__number * self.__period_pulse):
             self.Ipoints.append(0)
             self.Qpoints.append(0)
-            self.Zpoints.append(0)
+            self.test_points.append(0)
         else:
             if (in_time_c % self.__period_packet % self.__period_pulse) > self.__length:
                 self.Ipoints.append(0)
                 self.Qpoints.append(0)
-                self.Zpoints.append(0)
+                self.test_points.append(0)
             else:
-                self.Ipoints.append(self.garmonic(in_time_c, self.__frequency,
-                                    self.__amplify_i))
-                self.Qpoints.append(self.garmonic(in_time_c, self.__frequency,
-                                    self.__amplify_q, phs = math.pi/2))
-                self.Zpoints.append(self.Ipoints[-1] + self.Qpoints[-1])
+                self.Ipoints.append(self.__amplify_i * math.cos(math.pi * self.__phase / 180))
+                # self.Ipoints.append(math.cos(2 * math.pi * in_time_c / self.__period_pulse))
+                self.Qpoints.append(self.__amplify_q * math.sin(math.pi * self.__phase / 180))
+                # self.Qpoints.append(math.sin(2 * math.pi * in_time_c / self.__period_pulse))
+                self.test_points.append(self.__amplify_i * self.__length / self.__period_pulse * 
+                    (math.sin(2 * math.pi * math.pi * self.__length / self.__period_pulse) /
+                             (2 * math.pi * math.pi * self.__length / self.__period_pulse)))
+
+        self.Zpoints.append((self.Ipoints[-1] * self.garmonic(in_time_c, self.__frequency))
+                            - (self.Qpoints[-1] * self.garmonic(in_time_c, self.__frequency)))
 
     #Функция гармонического сигнала
-    def garmonic(self, tm, freq, amp = 1.0, phs = 0.0):
-        signal = amp * math.cos((2 * math.pi * freq * tm) + phs)
+    def garmonic(self, tm, freq, amp = 1.0):
+        signal = amp * math.cos(2 * math.pi * freq * tm)
         return signal
 
     def send_test(self):
@@ -109,6 +119,7 @@ class Radiopulse():
             self.Ipoints.pop(0)
             self.Qpoints.pop(0)
             self.Zpoints.pop(0)
+            self.test_points.pop(0)
 
         self.__start_time = self.xpoints[0]
         self.__end_time = self.xpoints[-1]

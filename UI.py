@@ -8,7 +8,7 @@ Created on Sat Feb 29 15:10:12 2020
 from PyQt5.QtWidgets import QMainWindow, QGridLayout, QSizePolicy, \
                             QMessageBox, QWidget, QGroupBox, QRadioButton, \
                             QVBoxLayout, QLabel, QHBoxLayout, QPushButton, \
-                            QDoubleSpinBox, QCheckBox
+                            QDoubleSpinBox, QCheckBox, QSpinBox
 from PyQt5.QtCore import Qt, QTimer
 from ExtUI import PlotPanel
 import Radiopulse
@@ -120,21 +120,14 @@ class SetupPanel(QWidget):
         
         # Create elements
 
-        # self.formula_label = QLabel("", setup_box)
-        # self.formula_label.setFixedSize(300, 120)
-        # self.formula_label.setAlignment(Qt.AlignVCenter)
-        # self.formula_label.setVisible(0)
+        self.phase_label = QLabel("Начальная фаза: ", setup_box)
+        self.phase_spinbox = QSpinBox(setup_box)
 
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
         self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
         self.ku_q_label = QLabel("Коэф. усиления Q:", setup_box)
         self.ku_q_spinbox = QDoubleSpinBox(setup_box)
-        self.ku_i_spinbox.setVisible(0)
-        self.ku_i_label.setVisible(0)
-        self.ku_q_spinbox.setVisible(0)
-        self.ku_q_label.setVisible(0)
-        self.divide_button.setVisible(0)
         f_label = QLabel("Частота:", setup_box)
         self.f_spinbox = QDoubleSpinBox(setup_box)
         self.time_label = QLabel("Период пачки:", setup_box)
@@ -142,17 +135,27 @@ class SetupPanel(QWidget):
         self.period_label = QLabel("Период импульсов:", setup_box)
         self.period_spinbox = QDoubleSpinBox(setup_box)
         self.number_label = QLabel("Число импульсов:", setup_box)
-        self.number_spinbox = QDoubleSpinBox(setup_box)
+        self.number_spinbox = QSpinBox(setup_box)
         self.pulse_label = QLabel("Длительность импульса:", setup_box)
         self.pulse_spinbox = QDoubleSpinBox(setup_box)
 
         # Configure spinboxes
+        self.phase_spinbox.setValue(0)
+        self.phase_spinbox.setRange(0, 180)
+        self.phase_spinbox.setSuffix(" град")
+        self.phase_spinbox.setVisible(0)
+        self.phase_label.setVisible(0)
+
         self.ku_i_spinbox.setValue(1)
         self.ku_i_spinbox.setRange(0, 100)
         self.ku_i_spinbox.setSingleStep(0.1)
-        self.ku_q_spinbox.setValue(1)
+        self.ku_i_spinbox.setVisible(0)
+        self.ku_i_label.setVisible(0)
+        self.ku_q_spinbox.setValue(1)     
         self.ku_q_spinbox.setRange(0, 100)
         self.ku_q_spinbox.setSingleStep(0.1)
+        self.ku_q_spinbox.setVisible(0)
+        self.ku_q_label.setVisible(0)
 
         self.f_spinbox.setSuffix(" МГц")
         self.f_spinbox.setValue(2)
@@ -164,8 +167,7 @@ class SetupPanel(QWidget):
         self.time_spinbox.setSingleStep(1)
         self.time_spinbox.setRange(1, 1000)
 
-        self.number_spinbox.setValue(4)
-        self.number_spinbox.setSingleStep(1)
+        self.number_spinbox.setValue(10)
         self.number_spinbox.setRange(1, 100)
 
         self.period_spinbox.setValue(10)
@@ -183,14 +185,11 @@ class SetupPanel(QWidget):
         self.number_spinbox.setVisible(0)
         self.number_label.setVisible(0)
         self.divide_button.setCheckable(1)
-
-        self.ku_i_label.setVisible(0)
-        self.ku_i_spinbox.setVisible(0)
-        self.ku_q_label.setVisible(0)
-        self.ku_q_spinbox.setVisible(0)
         self.divide_button.setVisible(0)
+
         # Pack elements
-        # inner_grid_layout.addWidget(self.formula_label, 0, 0, 1, -1)
+        inner_grid_layout.addWidget(self.phase_label, 0, 0)
+        inner_grid_layout.addWidget(self.phase_spinbox, 0, 1)
         inner_grid_layout.addWidget(self.ku_i_label, 2, 0)
         inner_grid_layout.addWidget(self.ku_i_spinbox, 2, 1)
         inner_grid_layout.addWidget(self.divide_button, 1, 0, 1, -1)

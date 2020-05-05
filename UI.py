@@ -125,7 +125,7 @@ class SetupPanel(QWidget):
 
         self.ku_i_label = QLabel("Коэф. усиления I:", setup_box)
         self.ku_i_spinbox = QDoubleSpinBox(setup_box)
-        self.divide_button = QPushButton("Совместное усиление квадратур", setup_box)
+        self.divide_button = QPushButton("Раздельное усиление квадратур", setup_box)
         self.ku_q_label = QLabel("Коэф. усиления Q:", setup_box)
         self.ku_q_spinbox = QDoubleSpinBox(setup_box)
         f_label = QLabel("Частота:", setup_box)

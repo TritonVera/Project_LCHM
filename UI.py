@@ -141,7 +141,7 @@ class SetupPanel(QWidget):
 
         # Configure spinboxes
         self.phase_spinbox.setValue(0)
-        self.phase_spinbox.setRange(0, 180)
+        self.phase_spinbox.setRange(-180, 180)
         self.phase_spinbox.setSuffix(" град")
         self.phase_spinbox.setVisible(0)
         self.phase_label.setVisible(0)

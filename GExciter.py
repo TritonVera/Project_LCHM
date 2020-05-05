@@ -181,10 +181,12 @@ def auto_but():
         ui.time_panel.time_stop_spinbox.setEnabled(0)
         ui.time_panel.time_start_spinbox.setEnabled(0)
         ui.timer.start(20)
+        ui.time_panel.auto_button.setText("Стоп")
     else:
         ui.timer.stop()
         ui.time_panel.time_stop_spinbox.setEnabled(1)
         ui.time_panel.time_start_spinbox.setEnabled(1)
+        ui.time_panel.auto_button.setText("Запуск")
 
 def div_but():
     if (ui.setup_panel.divide_button.isChecked()):

@@ -23,7 +23,7 @@ class Radiopulse():
             self.Ipoints = []      #Косинусоидальная квадратура сигнала
             self.Qpoints = []      #Синусоидальная квадратура сигнала
             self.Zpoints = []      #Комплексный сигнал
-            self.test_points = []  # Тестируемый сигнал 
+            # self.test_points = []  # Тестируемый сигнал 
 
             for i in self.xpoints:
                 self.gen_signal(i)
@@ -64,7 +64,7 @@ class Radiopulse():
         self.Ipoints = []
         self.Qpoints = []
         self.Zpoints = []
-        self.test_points = []
+        # self.test_points = []
 
         for i in self.xpoints:
             self.gen_signal(i)
@@ -75,27 +75,26 @@ class Radiopulse():
         if (in_time_c % self.__period_packet) > (self.__number * self.__period_pulse):
             self.Ipoints.append(0)
             self.Qpoints.append(0)
-            self.test_points.append(0)
+            # self.test_points.append(0)
         else:
             if (in_time_c % self.__period_packet % self.__period_pulse) > self.__length:
                 self.Ipoints.append(0)
                 self.Qpoints.append(0)
-                self.test_points.append(0)
+                # self.test_points.append(0)
             else:
                 self.Ipoints.append(self.__amplify_i * math.cos(math.pi * self.__phase / 180))
-                # self.Ipoints.append(math.cos(2 * math.pi * in_time_c / self.__period_pulse))
                 self.Qpoints.append(self.__amplify_q * math.sin(math.pi * self.__phase / 180))
-                # self.Qpoints.append(math.sin(2 * math.pi * in_time_c / self.__period_pulse))
-                self.test_points.append(self.__amplify_i * self.__length / self.__period_pulse * 
-                    (math.sin(2 * math.pi * math.pi * self.__length / self.__period_pulse) /
-                             (2 * math.pi * math.pi * self.__length / self.__period_pulse)))
+                # self.test_points.append(self.__amplify_i * self.__length / self.__period_pulse * 
+                #     (math.sin(2 * math.pi * math.pi * self.__length / self.__period_pulse) /
+                #              (2 * math.pi * math.pi * self.__length / self.__period_pulse)))
 
         self.Zpoints.append((self.Ipoints[-1] * self.garmonic(in_time_c, self.__frequency))
-                            - (self.Qpoints[-1] * self.garmonic(in_time_c, self.__frequency)))
+                            + (self.Qpoints[-1] * self.garmonic(in_time_c, self.__frequency,
+                                                                phs = 90)))
 
     #Функция гармонического сигнала
-    def garmonic(self, tm, freq, amp = 1.0):
-        signal = amp * math.cos(2 * math.pi * freq * tm)
+    def garmonic(self, tm, freq, amp = 1.0, phs = 0):
+        signal = amp * math.cos((2 * math.pi * freq * tm) + (math.pi * phs / 180))
         return signal
 
     def send_test(self):
@@ -119,7 +118,7 @@ class Radiopulse():
             self.Ipoints.pop(0)
             self.Qpoints.pop(0)
             self.Zpoints.pop(0)
-            self.test_points.pop(0)
+            # self.test_points.pop(0)
 
         self.__start_time = self.xpoints[0]
         self.__end_time = self.xpoints[-1]

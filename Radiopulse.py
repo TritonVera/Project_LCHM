@@ -90,11 +90,11 @@ class Radiopulse():
 
         self.Zpoints.append((self.Ipoints[-1] * self.garmonic(in_time_c, self.__frequency))
                             + (self.Qpoints[-1] * self.garmonic(in_time_c, self.__frequency,
-                                                                phs = 90)))
+                                                                phs = -math.pi/2)))
 
     #Функция гармонического сигнала
     def garmonic(self, tm, freq, amp = 1.0, phs = 0):
-        signal = amp * math.cos((2 * math.pi * freq * tm) + (math.pi * phs / 180))
+        signal = amp * math.cos((2 * math.pi * freq * tm) + phs)
         return signal
 
     def send_test(self):

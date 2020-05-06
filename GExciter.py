@@ -63,8 +63,8 @@ def radio_push():
         ui.setup_panel.pulse_spinbox.setValue(2)
         ui.setup_panel.pulse_spinbox.setSingleStep(0.1)
 
-        ui.setup_panel.ku_i_label.setVisible(1)
-        ui.setup_panel.ku_i_spinbox.setVisible(1)
+        ui.setup_panel.ku_i_label.setVisible(0)
+        ui.setup_panel.ku_i_spinbox.setVisible(0)
 
         plotb()
 
@@ -130,7 +130,7 @@ def redraw_plot():
         ui.setup_panel.pulse_spinbox.setMaximum(ui.setup_panel.period_spinbox.value())
         ui.setup_panel.period_spinbox.setMinimum(ui.setup_panel.pulse_spinbox.value())
         ui.setup_panel.period_spinbox.setMaximum(ui.setup_panel.time_spinbox.value() / 
-                                                ui.setup_panel.number_spinbox.value())
+                                                 ui.setup_panel.number_spinbox.value())
         ui.setup_panel.time_spinbox.setMinimum(ui.setup_panel.period_spinbox.value() * 
                                                ui.setup_panel.number_spinbox.value())
         ui.setup_panel.number_spinbox.setMaximum(round(ui.setup_panel.time_spinbox.value() / 

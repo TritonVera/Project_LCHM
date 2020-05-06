@@ -65,9 +65,6 @@ def radio_push():
 
         ui.setup_panel.ku_i_label.setVisible(1)
         ui.setup_panel.ku_i_spinbox.setVisible(1)
-        ui.setup_panel.ku_q_label.setVisible(1)
-        ui.setup_panel.ku_q_spinbox.setVisible(1)
-        ui.setup_panel.divide_button.setVisible(1)
 
         plotb()
 
@@ -84,9 +81,6 @@ def N_LNF(): #Н_ЛЧМ
     ui.setup_panel.phase_label.setVisible(0)
     ui.setup_panel.ku_i_label.setVisible(0)
     ui.setup_panel.ku_i_spinbox.setVisible(0)
-    ui.setup_panel.ku_q_label.setVisible(0)
-    ui.setup_panel.ku_q_spinbox.setVisible(0)
-    ui.setup_panel.divide_button.setVisible(0)
 
     ui.setup_panel.time_spinbox.setVisible(0)
     ui.setup_panel.time_label.setVisible(0)
@@ -132,10 +126,6 @@ def redraw_plot_time():
             plotb()
 
 def redraw_plot():
-  
-    if (ui.setup_panel.divide_button.isChecked()):
-        ui.setup_panel.ku_q_spinbox.setValue(ui.setup_panel.ku_i_spinbox.value())
-    
     if (ui.choose_panel.radio_radiobutton.isChecked()):
         ui.setup_panel.pulse_spinbox.setMaximum(ui.setup_panel.period_spinbox.value())
         ui.setup_panel.period_spinbox.setMinimum(ui.setup_panel.pulse_spinbox.value())
@@ -147,7 +137,7 @@ def redraw_plot():
                                                  ui.setup_panel.period_spinbox.value()))
         radio.configure(frequency = ui.setup_panel.f_spinbox.value(), 
                         amplify_i = ui.setup_panel.ku_i_spinbox.value(),
-                        amplify_q = ui.setup_panel.ku_q_spinbox.value(),
+                        amplify_q = ui.setup_panel.ku_i_spinbox.value(),
                         length = ui.setup_panel.pulse_spinbox.value(),
                         period_pulse = ui.setup_panel.period_spinbox.value(),
                         number = ui.setup_panel.number_spinbox.value(),
@@ -163,7 +153,7 @@ def redraw_plot():
 
     if (ui.choose_panel.nlchm_radiobutton.isChecked() or ui.choose_panel.lchm_radiobutton.isChecked()):
         radio_mod.Configure_values(Amplify_I = ui.setup_panel.ku_i_spinbox.value(),
-                                   Amplify_Q = ui.setup_panel.ku_q_spinbox.value(),
+                                   Amplify_Q = ui.setup_panel.ku_i_spinbox.value(),
                                    F = ui.setup_panel.f_spinbox.value(),
                                    Imp = ui.setup_panel.pulse_spinbox.value(),
                                    T = ui.setup_panel.period_spinbox.value())
@@ -187,18 +177,6 @@ def auto_but():
         ui.time_panel.time_stop_spinbox.setEnabled(1)
         ui.time_panel.time_start_spinbox.setEnabled(1)
         ui.time_panel.auto_button.setText("Запуск")
-
-def div_but():
-    if (ui.setup_panel.divide_button.isChecked()):
-        ui.setup_panel.ku_q_spinbox.setVisible(0)
-        ui.setup_panel.ku_q_label.setVisible(0)
-        ui.setup_panel.ku_i_label.setText("Коэф. усиления")
-        ui.setup_panel.divide_button.setText("Раздельное усиление квадратур")
-    else:
-        ui.setup_panel.ku_i_label.setText("Коэф. усиления I:")
-        ui.setup_panel.ku_q_label.setVisible(1)
-        ui.setup_panel.ku_q_spinbox.setVisible(1)
-        ui.setup_panel.divide_button.setText("Совместное усиление квадратур")
 
 def visible_i():
     if ui.graph_panel.I_box.isChecked():
@@ -230,7 +208,6 @@ ui.choose_panel.lchm_radiobutton.toggled.connect(N_LNF)
 ui.choose_panel.nlchm_radiobutton.toggled.connect(N_LNF)
 ui.button_panel.exit_button.clicked.connect(close)
 ui.time_panel.auto_button.toggled.connect(auto_but)
-ui.setup_panel.divide_button.toggled.connect(div_but)
 ui.graph_panel.I_box.toggled.connect(visible_i)
 ui.graph_panel.Q_box.toggled.connect(visible_q)
 ui.graph_panel.Z_box.toggled.connect(visible_z)
@@ -238,7 +215,6 @@ ui.graph_panel.Z_box.toggled.connect(visible_z)
 #Привязка изменения значения в спинбоксах
 ui.setup_panel.phase_spinbox.valueChanged.connect(redraw_plot)
 ui.setup_panel.ku_i_spinbox.valueChanged.connect(redraw_plot)
-ui.setup_panel.ku_q_spinbox.valueChanged.connect(redraw_plot)
 ui.setup_panel.f_spinbox.valueChanged.connect(redraw_plot)
 ui.setup_panel.time_spinbox.valueChanged.connect(redraw_plot)
 ui.setup_panel.pulse_spinbox.valueChanged.connect(redraw_plot)

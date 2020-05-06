@@ -193,12 +193,12 @@ def div_but():
         ui.setup_panel.ku_q_spinbox.setVisible(0)
         ui.setup_panel.ku_q_label.setVisible(0)
         ui.setup_panel.ku_i_label.setText("Коэф. усиления")
-        ui.setup_panel.divide_button.setText("Совместное усиление квадратур")
+        ui.setup_panel.divide_button.setText("Раздельное усиление квадратур")
     else:
         ui.setup_panel.ku_i_label.setText("Коэф. усиления I:")
         ui.setup_panel.ku_q_label.setVisible(1)
         ui.setup_panel.ku_q_spinbox.setVisible(1)
-        ui.setup_panel.divide_button.setText("Раздельное усиление квадратур")
+        ui.setup_panel.divide_button.setText("Совместное усиление квадратур")
 
 def visible_i():
     if ui.graph_panel.I_box.isChecked():
